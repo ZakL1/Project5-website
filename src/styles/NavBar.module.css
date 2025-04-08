@@ -1,0 +1,50 @@
+.NavBar {
+    background-color:#d7e3fc;
+}
+
+.NavBarBrand {
+    font-size: 30px;
+    padding-right: 20px;
+}
+
+.NavLink {
+    color: rgb(37, 37, 37);
+    font-size: 20px;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    position: relative;
+    border-radius: 5px;
+    z-index: 1;
+    overflow: hidden;
+}
+  
+.NavLink::before,
+.NavLink::after {
+    content: "";
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.2);
+    width: 0%;
+    height: 100%;
+    top: 0;
+    transition: width 0.4s ease-in-out;
+    z-index: -1;
+}
+  
+.NavLink::before {
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
+}
+  
+.NavLink::after {
+    right: 50%;
+    transform: translateX(50%);
+    border-radius: 5px;
+}
+  
+.NavLink:hover::before,
+.NavLink:hover::after {
+    width: 100%;
+}
+

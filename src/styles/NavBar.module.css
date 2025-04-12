@@ -5,6 +5,7 @@
 .NavBarBrand {
     font-size: 30px;
     padding-right: 20px;
+    font-weight: bold;
 }
 
 .NavLink {

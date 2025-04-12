@@ -24,8 +24,8 @@ function NavBar() {
           <Nav>
           {currentUser ? (
               <>
-                <span className={`me-2 ${styles.NavLink}`}>Hi, {currentUser.username}</span>
-                <Button variant="outline-light" onClick={handleLogout}>Logout</Button>
+                <span className={`me-2 ${styles.NavLink}`}>Hi {currentUser.username}</span>
+                <Nav.Link as={NavLink} onClick={handleLogout} className={styles.NavLink}>Logout</Nav.Link>
               </>
             ) : (
               <>

@@ -1,46 +1,51 @@
 .Row {
     height: calc(100vh - 81px);
 }
-  .Input {
+
+.Input {
     background: #ffffff;
     border: 1px solid #f0f1f9;
     box-sizing: border-box;
     border-radius: 2px;
-    color: #7177a1;
+    color: black;
     text-align: center;
     padding: 10px;
 }
   
-  .Header {
+.Header {
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
     line-height: 19px;
     text-align: center;
-    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #2142b2;
+    color: black;
 }
   
-  .Link {
+.Link {
     text-decoration: none;
     text-align: center;
     display: block;
     margin: auto;
+    color: black;
 }
   
-  .Link span {
-    color: #ff9254;
+.Link span {
+    color: blue;
 }
   
-  .Container {
+.Container {
     padding: 30px 10px;
 }
   
-  .SignInCol {
+.SignInCol {
     height: 320px;
 }
   
-  .SignUpCol {
+.SignUpCol {
     height: 375px;
+}
+
+.FormGroup {
+  padding: 5px;
 }

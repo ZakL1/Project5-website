@@ -23,7 +23,7 @@ const SignInForm = () => {
 
     const navigate = useNavigate();
 
-    // 👇 Access setCurrentUser from context
+    //  Access setCurrentUser from context
     const { setCurrentUser } = useAuth();
 
     const handleChange = (event) => {
@@ -38,7 +38,7 @@ const SignInForm = () => {
         try {
             await axios.post("http://127.0.0.1:8000/dj-rest-auth/login/", { username, password });
 
-            // 👇 Get the logged-in user's data and set it in context
+            // Get the logged-in user's data and set it in context
             const profileRes = await axios.get("http://127.0.0.1:8000/profiles/");  // Add (me) to the end to show who the user is
             console.log("Profile:", profileRes.data);
             setCurrentUser(profileRes.data);
@@ -56,7 +56,7 @@ const SignInForm = () => {
                     <h1 className={styles.Header}>sign in</h1>
 
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId="username">
+                        <Form.Group controlId="username" className={styles.FormGroup}>
                             <Form.Label className="d-none">username</Form.Label>
                             <Form.Control
                                 className={styles.Input}
@@ -71,7 +71,7 @@ const SignInForm = () => {
                             <Alert variant="warning" key={idx}>{message}</Alert>
                         ))}
 
-                        <Form.Group controlId="password">
+                        <Form.Group controlId="password" className={styles.FormGroup}>
                             <Form.Label className="d-none">Password</Form.Label>
                             <Form.Control
                                 className={styles.Input}

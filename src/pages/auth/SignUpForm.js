@@ -54,7 +54,7 @@ const SignUpForm = () => {
                     <h1 className={styles.Header}>sign up</h1>
 
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId="username">
+                        <Form.Group controlId="username" className={styles.FormGroup}>
                             <Form.Label className="d-none">username</Form.Label>
                             <Form.Control
                                 className={styles.Input}
@@ -71,7 +71,7 @@ const SignUpForm = () => {
                                 </Alert>
                             ))}
 
-                        <Form.Group controlId="password1">
+                        <Form.Group controlId="password1" className={styles.FormGroup}>
                             <Form.Label className="d-none">Password</Form.Label>
                             <Form.Control
                                 className={styles.Input}
@@ -88,7 +88,7 @@ const SignUpForm = () => {
                                 </Alert>
                             ))}
 
-                        <Form.Group controlId="password2">
+                        <Form.Group controlId="password2" className={styles.FormGroup}>
                             <Form.Label className="d-none">Confirm password</Form.Label>
                             <Form.Control
                                 className={styles.Input}
@@ -121,8 +121,7 @@ const SignUpForm = () => {
 
                 <Container className={`mt-3 ${appStyles.Content}`}>
                     <Link className={styles.Link} to="/signin">
-                        Already have an account?
-                        <span>Sign in</span>
+                        Already have an account? <span>Sign in</span>
                     </Link>
                 </Container>
             </Col>

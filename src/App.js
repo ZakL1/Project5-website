@@ -6,6 +6,7 @@ import {Route, Routes} from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import SignUpForm from "./pages/auth/SignUpForm";
 import SignInForm from "./pages/auth/SignInForm";
+import ProfilePage from "./pages/profiles/ProfilePage";
 
 function App() {
     return (
@@ -15,6 +16,7 @@ function App() {
                 <Container>
                     <Routes>
                         <Route path="/" element={<h1> Home page </h1>} />
+                        <Route path="/profile" element={< ProfilePage />}/>
                         <Route path="/signin" element={< SignInForm />}/>
                         <Route path="/signup" element={< SignUpForm />}/>
                         <Route path="*" element={<p> Page not found !</p>}/>

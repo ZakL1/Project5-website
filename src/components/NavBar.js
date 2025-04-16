@@ -18,13 +18,12 @@ function NavBar() {
           <Nav className="me-auto">
           <Nav.Link as={NavLink} to="/" className={styles.NavLink}>Home</Nav.Link>
             {currentUser && (
-              <Nav.Link as={NavLink} to="/profile" className={styles.NavLink}>Profile</Nav.Link>
+              <Nav.Link as={NavLink} to="/profiles/me" className={styles.NavLink}>Profile</Nav.Link>
             )}
           </Nav>
           <Nav>
           {currentUser ? (
               <>
-                <span className={`me-2 ${styles.NavLink}`}>Hi {currentUser.username}</span>
                 <Nav.Link as={NavLink} onClick={handleLogout} className={styles.NavLink}>Logout</Nav.Link>
               </>
             ) : (
@@ -39,5 +38,5 @@ function NavBar() {
     </Navbar>
   );
 }
-
+               
 export default NavBar;

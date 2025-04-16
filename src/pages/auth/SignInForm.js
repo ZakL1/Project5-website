@@ -24,7 +24,7 @@ const SignInForm = () => {
 
     // Access setCurrentUser and setToken from context if available. If your
     // AuthContext doesn't have setToken yet, you might want to add it.
-    const {setCurrentUser, setToken} = useAuth();
+    const { login } = useAuth();
 
     const handleChange = (event) => {
         console.log("Input Changed:", event.target.name, event.target.value);
@@ -36,45 +36,36 @@ const SignInForm = () => {
         });
     };
 
-    const handleSubmit = async(event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            // 1. Send login credentials to the backend
-            const loginRes = await axios.post("http://127.0.0.1:8000/dj-rest-auth/login/", {username, password});
-
-            // 2. Extract token from login response Make sure your backend actually returns
-            // the token key (could be named 'token' or something else)
-            const authToken = loginRes.data.key;
-
-            // Store token in localStorage (if desired) and in your auth context
-            localStorage.setItem("token", authToken);
-            if (setToken) {
-                setToken(authToken); // If your context provides a setter for the token
-            }
-
-            // Optionally, you can set the default Authorization header for future axios
-            // requests:
-            axios.defaults.headers.common["Authorization"] = `Token ${authToken}`;
-
-            // 3. Now that you have a token, request the current user's profile. Using
-            // /profiles/me/ which should return only the logged-in user's profile.
-            const profileRes = await axios.get("http://127.0.0.1:8000/profiles/me/");
-            console.log("Profile:", profileRes.data);
-
-            // 4. Set the current user in your context (so your app knows the user is logged
-            // in)
-            setCurrentUser(profileRes.data);
-
-            // 5. Navigate to the homepage (or wherever you wish)
-            navigate("/");
+          // 1. Login and get token
+          const loginRes = await axios.post("http://127.0.0.1:8000/dj-rest-auth/login/", {
+            username,
+            password
+          });
+      
+          const token = loginRes.data.key;
+      
+          // 2. Set Authorization header globally for axios
+          axios.defaults.headers.common["Authorization"] = `Token ${token}`;
+      
+          // 3. Get user profile
+          const profileRes = await axios.get("http://127.0.0.1:8000/profiles/me/");
+      
+          // 4. Use login() from context
+          login({
+            token: token,
+            user: profileRes.data
+          });
+          
+          // 5. Navigate
+          navigate("/profiles/me/");
         } catch (err) {
-            // In case of an error, set the error messages to display.
-            setErrors(err.response
-                ?.data);
-            console.error("Login error:", err.response
-                ?.data);
+          console.error("Login error:", err);
+          setErrors(err.response?.data || {});
         }
-    };
+      };
     
     return (
         <Row className={styles.Row}>

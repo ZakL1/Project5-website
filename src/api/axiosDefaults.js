@@ -1,20 +1,14 @@
-/*import axios from 'axios';
-
-const API_URL = "http://127.0.0.1:8000";*/
-
-// api.js'
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/',
+  baseURL: "http://127.0.0.1:8000/",
 });
 
-export default api;
+// Grab the token from localStorage and attach it to every request
+const token = localStorage.getItem("token");
+console.log(token)
+if (token) {
+  api.defaults.headers.common["Authorization"] = `Token ${token}`;
+}
 
-export const setAuthorizationHeader = (token) => {
-  if (token) {
-    api.defaults.headers.common['Authorization'] = `Token ${token}`;
-  } else {
-    delete api.defaults.headers.common['Authorization'];
-  }
-};
+export default api;

@@ -83,6 +83,7 @@ const ProfilePage = () => {
   useEffect(() => {
     api.get('profiles/me/')
       .then((response) => {
+        console.log('Fetched user profile:', response.data);
         setUser(response.data);
       })
       .catch((error) => {
@@ -94,7 +95,7 @@ const ProfilePage = () => {
 
   return (
     <div>
-      <h2>Welcome, {user.name}</h2>
+      <h2>Welcome, {user.name || user.owner}</h2>
       {/* More profile info */}
     </div>
   );

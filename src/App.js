@@ -16,7 +16,7 @@ function App() {
                 <Container>
                     <Routes>
                         <Route path="/" element={<h1> Home page </h1>} />
-                        <Route path="/profile" element={< ProfilePage />}/>
+                        <Route path="/profiles/me" element={< ProfilePage />}/>
                         <Route path="/signin" element={< SignInForm />}/>
                         <Route path="/signup" element={< SignUpForm />}/>
                         <Route path="*" element={<p> Page not found !</p>}/>

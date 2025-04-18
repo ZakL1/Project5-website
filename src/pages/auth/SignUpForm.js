@@ -4,6 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import styles from "../../styles/SignInUpForm.module.css";
 import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
+import signInImage from "../../assets/signinout.jpg"
 import axios from "axios";
 import {
     Form,
@@ -14,7 +15,6 @@ import {
     Container,
     Alert
 } from "react-bootstrap";
-
 
 const SignUpForm = () => {
     const [signUpData,
@@ -41,14 +41,19 @@ const SignUpForm = () => {
             navigate("/signin");
             console.log("Navigating to Sign In"); // Debug log
         } catch (err) {
-            console.error("Sign-up error:", err.response?.data); // Debug log
+            console.error("Sign-up error:", err.response
+                ?.data); // Debug log
             setErrors(err.response
                 ?.data);
         }
     };
 
     return (
-        <Row className={styles.Row}>
+        <Row
+            className={`align-items-center ${styles.Row}`}
+            style={{
+            minHeight: "100vh"
+        }}>
             <Col className="my-auto py-2 p-md-2" md={6}>
                 <Container className={`${appStyles.Content} p-4 `}>
                     <h1 className={styles.Header}>sign up</h1>
@@ -121,9 +126,16 @@ const SignUpForm = () => {
 
                 <Container className={`mt-3 ${appStyles.Content}`}>
                     <Link className={styles.Link} to="/signin">
-                        Already have an account? <span>Sign in</span>
+                        Already have an account?
+                        <span>Sign in</span>
                     </Link>
                 </Container>
+            </Col>
+            <Col xs={12} md={6} className={`my-auto p-2 ${styles.SignInCol}`}>
+                <Image
+                    className={styles.Image}
+                    src={signInImage}
+                    fluid/>
             </Col>
         </Row>
     );

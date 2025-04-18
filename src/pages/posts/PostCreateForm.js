@@ -15,7 +15,7 @@ import Alert from "react-bootstrap/Alert";
 import Image from "react-bootstrap/Image";
 
 import Upload from "../../assets/default-upload.png";
-import Asset from "../../assets/no-results.png";
+import Asset from "../../assets/default-upload.png";
 
 const PostCreateForm = () => {
   const [postData, setPostData] = useState({

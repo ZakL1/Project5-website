@@ -3,11 +3,13 @@ import {Link, useNavigate} from "react-router-dom";
 import styles from "../../styles/SignInUpForm.module.css";
 import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
+import signInImage from "../../assets/signinout.jpg"
 import axios from "axios";
 import {
     Form,
     Button,
     Alert,
+    Image,
     Col,
     Row,
     Container
@@ -24,7 +26,7 @@ const SignInForm = () => {
 
     // Access setCurrentUser and setToken from context if available. If your
     // AuthContext doesn't have setToken yet, you might want to add it.
-    const { login } = useAuth();
+    const {login} = useAuth();
 
     const handleChange = (event) => {
         console.log("Input Changed:", event.target.name, event.target.value);
@@ -36,39 +38,34 @@ const SignInForm = () => {
         });
     };
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async(event) => {
         event.preventDefault();
         try {
-          // 1. Login and get token
-          const loginRes = await axios.post("http://127.0.0.1:8000/dj-rest-auth/login/", {
-            username,
-            password
-          });
-      
-          const token = loginRes.data.key;
-      
-          // 2. Set Authorization header globally for axios
-          axios.defaults.headers.common["Authorization"] = `Token ${token}`;
-      
-          // 3. Get user profile
-          const profileRes = await axios.get("http://127.0.0.1:8000/profiles/me/");
-      
-          // 4. Use login() from context
-          login({
-            token: token,
-            user: profileRes.data
-          });
-          
-          // 5. Navigate
-          navigate("/profiles/me/");
+            // 1. Login and get token
+            const loginRes = await axios.post("http://127.0.0.1:8000/dj-rest-auth/login/", {username, password});
+
+            const token = loginRes.data.key;
+
+            // 2. Set Authorization header globally for axios
+            axios.defaults.headers.common["Authorization"] = `Token ${token}`;
+
+            // 3. Get user profile
+            const profileRes = await axios.get("http://127.0.0.1:8000/profiles/me/");
+
+            // 4. Use login() from context
+            login({token: token, user: profileRes.data});
+
+            // 5. Navigate
+            navigate("/profiles/me/");
         } catch (err) {
-          console.error("Login error:", err);
-          setErrors(err.response?.data || {});
+            console.error("Login error:", err);
+            setErrors(err.response
+                ?.data || {});
         }
-      };
-    
+    };
+
     return (
-        <Row className={styles.Row}>
+        <Row className={`align-items-center ${styles.Row}`} style={{ minHeight: "100vh" }}>
             <Col className="my-auto py-2 p-md-2" md={6}>
                 <Container className={`${appStyles.Content} p-4`}>
                     <h1 className={styles.Header}>sign in</h1>
@@ -124,6 +121,12 @@ const SignInForm = () => {
                         <span>Sign up</span>
                     </Link>
                 </Container>
+            </Col>
+            <Col xs={12} md={6} className={`my-auto p-2 ${styles.SignInCol}`}>
+                <Image
+                    className={styles.Image}
+                    src={signInImage}
+                    fluid/>
             </Col>
         </Row>
     );

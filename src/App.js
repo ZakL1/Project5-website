@@ -1,6 +1,5 @@
 import { AuthProvider } from "./contexts/AuthContext";
 import NavBar from './components/NavBar.js';
-/*import Post from './pages/Post';*/
 import styles from './App.module.css';
 import {Route, Routes} from "react-router-dom";
 import Container from "react-bootstrap/Container";
@@ -9,6 +8,7 @@ import SignInForm from "./pages/auth/SignInForm";
 import ProfilePage from "./pages/profiles/ProfilePage";
 import PostCreateForm from "./pages/posts/PostCreateForm";
 import PostPage from "./pages/posts/PostPage";
+import PostsPage from "./pages/posts/PostsPage";
 import PostEditForm from "./pages/posts/PostEditForm";
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
                 <NavBar/>
                 <Container>
                     <Routes>
-                        <Route path="/" element={<h1> Home page </h1>} />
+                        <Route path="/" element={< PostsPage />} />
                         <Route path="/profiles/me" element={< ProfilePage />}/>
                         <Route path="/signin" element={< SignInForm />}/>
                         <Route path="/signup" element={< SignUpForm />}/>

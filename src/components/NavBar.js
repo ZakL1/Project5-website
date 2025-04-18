@@ -18,7 +18,10 @@ function NavBar() {
           <Nav className="me-auto">
           <Nav.Link as={NavLink} to="/" className={styles.NavLink}>Home</Nav.Link>
             {currentUser && (
+              <>
               <Nav.Link as={NavLink} to="/profiles/me" className={styles.NavLink}>Profile</Nav.Link>
+              <Nav.Link as={NavLink} to="/posts/create" className={styles.NavLink}>Share</Nav.Link>
+              </>
             )}
           </Nav>
           <Nav>

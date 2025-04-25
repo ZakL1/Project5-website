@@ -1,5 +1,6 @@
-.Card {
-    margin-top: 10vh;;
-    background-color: #d7e3fc;
-    padding: 20px;
+.profileCard {
+    margin-top: 4vh;
+    background-color: #d7e3fc !important;
+    padding: 20px; 
 }
+  

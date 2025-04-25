@@ -20,13 +20,14 @@ const PostCreateForm = () => {
   const [postData, setPostData] = useState({
     title: "",
     content: "",
-    image: "",
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [errors, setErrors] = useState({});
   const imageInput = useRef(null);
   const navigate = useNavigate();
 
-  const { title, content, image } = postData;
+  const { title, content } = postData;
 
   const handleChange = (event) => {
     setPostData({
@@ -37,11 +38,14 @@ const PostCreateForm = () => {
 
   const handleChangeImage = (event) => {
     if (event.target.files.length) {
-      URL.revokeObjectURL(image);
-      setPostData({
-        ...postData,
-        image: URL.createObjectURL(event.target.files[0]),
-      });
+      const file = event.target.files[0];
+      setImageFile(file);
+
+      // Revoke old preview URL to avoid memory leaks
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      setPreviewUrl(URL.createObjectURL(file));
     }
   };
 
@@ -51,7 +55,9 @@ const PostCreateForm = () => {
 
     formData.append("title", title);
     formData.append("content", content);
-    formData.append("image", imageInput.current.files[0]);
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
 
     try {
       const { data } = await api.post("/posts/", formData);
@@ -66,15 +72,19 @@ const PostCreateForm = () => {
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
-      <Col xs={12} sm={10} md={8} lg={6} xl={5} className="mx-auto">
+        <Col xs={12} sm={10} md={8} lg={6} xl={5} className="mx-auto">
           <Container
             className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
           >
             <Form.Group className="text-center">
-              {image ? (
+              {previewUrl ? (
                 <>
                   <figure>
-                  <Image className={`${appStyles.Image} ${styles.ImagePreview}`} src={image} rounded />
+                    <Image
+                      className={`${appStyles.Image} ${styles.ImagePreview}`}
+                      src={previewUrl}
+                      rounded
+                    />
                   </figure>
                   <div>
                     <Form.Label
@@ -90,10 +100,9 @@ const PostCreateForm = () => {
                   className="d-flex justify-content-center"
                   htmlFor="image-upload"
                 >
-                  <Image src={defaultPost} message="Click or tap to upload an image" />
+                  <Image src={defaultPost} />
                 </Form.Label>
               )}
-
               <Form.Control
                 type="file"
                 id="image-upload"
@@ -103,7 +112,9 @@ const PostCreateForm = () => {
               />
             </Form.Group>
             {errors?.image?.map((message, idx) => (
-              <Alert variant="warning" key={idx}>{message}</Alert>
+              <Alert variant="warning" key={idx}>
+                {message}
+              </Alert>
             ))}
 
             <Form.Group>
@@ -116,7 +127,9 @@ const PostCreateForm = () => {
               />
             </Form.Group>
             {errors?.title?.map((message, idx) => (
-              <Alert variant="warning" key={idx}>{message}</Alert>
+              <Alert variant="warning" key={idx}>
+                {message}
+              </Alert>
             ))}
 
             <Form.Group>
@@ -130,7 +143,9 @@ const PostCreateForm = () => {
               />
             </Form.Group>
             {errors?.content?.map((message, idx) => (
-              <Alert variant="warning" key={idx}>{message}</Alert>
+              <Alert variant="warning" key={idx}>
+                {message}
+              </Alert>
             ))}
 
             <div className="mt-3 text-center">

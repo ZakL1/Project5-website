@@ -24,7 +24,7 @@ function App() {
                         <Route path="/signup" element={< SignUpForm />}/>
                         <Route path="/posts/create" element={< PostCreateForm />}/>
                         <Route path="/posts/:id" element={< PostPage />}/>
-                        <Route path="/posts/:id" element={< PostEditForm />}/>
+                        <Route path="/posts/:id/edit" element={< PostEditForm />}/>
                         <Route path="/signup" element={< SignUpForm />}/>
                         <Route path="*" element={<p> Page not found !</p>}/>
                     </Routes>

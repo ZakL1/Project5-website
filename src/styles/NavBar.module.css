@@ -13,7 +13,7 @@
     font-size: 20px;
     text-decoration: none;
     padding: 10px 20px;
-    margin: 0 5px;
+    margin: 0 15px;
     position: relative;
     border-radius: 5px;
     z-index: 1;
@@ -49,3 +49,9 @@
     width: 100%;
 }
 
+/* Nav bar logo */
+.shutterLogo {
+    width: 6vh; 
+    height: 6vh; 
+    margin-right: 2vh; 
+}

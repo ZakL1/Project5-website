@@ -1,20 +1,17 @@
-import {Row, Col, Container, Card, Button} from "react-bootstrap";
-import {useEffect, useState} from 'react';
+import { Row, Col, Container, Card, Button } from "react-bootstrap";
+import React, { useEffect, useState } from 'react';
 import api from '../../api/axiosDefaults';
 import styles from "../../styles/Profile.module.css";
 import defaultProfile from '../../assets/defaultprofile.png';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Asset from "../../components/Asset";
 
 const ProfilePage = () => {
-    const [user,
-        setUser] = useState(null);
-    const [image,
-        setImage] = useState('');
-    const [isUploading,
-        setIsUploading] = useState(false);
-    const [posts,
-        setPosts] = useState([]);
-
+    const [user, setUser] = useState(null);
+    const [image, setImage] = useState("");
+    const [posts, setPosts] = useState([]);
+    const [hasLoaded, setHasLoaded] = useState(false);  // Added hasLoaded state
+    const [isUploading, setIsUploading] = useState(false);
     const navigate = useNavigate();
 
     const handleEdit = (postId) => {
@@ -23,26 +20,23 @@ const ProfilePage = () => {
 
     /* Collects user's posts */
     useEffect(() => {
-        const fetchPosts = async() => {
+        const fetchPosts = async () => {
             try {
                 const response = await api.get('/posts/');
-                const userPosts = response
-                    .data
-                    .filter(post => post.owner === user
-                        ?.owner);
+                const userPosts = response.data.filter(post => post.owner === user?.owner);
                 setPosts(userPosts);
             } catch (err) {
                 console.error("Failed to fetch posts", err);
             }
         };
 
-        if (user) 
+        if (user) {
             fetchPosts();
         }
-    , [user]);
+    }, [user]);
 
     /* Delete function for owner of posts */
-    const handleDelete = async(postId) => {
+    const handleDelete = async (postId) => {
         try {
             await api.delete(`/posts/${postId}/`);
             setPosts((prevPosts) => prevPosts.filter(post => post.id !== postId));
@@ -51,27 +45,24 @@ const ProfilePage = () => {
         }
     };
 
-    /* Collects users profile from api */
+    /* Collects user's profile from API */
     useEffect(() => {
-        api
-            .get('profiles/me/')
+        api.get('profiles/me/')
             .then((response) => {
                 console.log('Fetched user profile:', response.data);
                 setUser(response.data);
+                setHasLoaded(true);  // Set hasLoaded to true after user profile is fetched
             })
             .catch((error) => {
                 console.error('Error fetching user:', error);
+                setHasLoaded(true);  // Set hasLoaded to true even if there's an error (stop spinner)
             });
     }, []);
 
-    if (!user) 
-        return <p>Loading...</p>;
-    
-    const handleImageUpload = async(e) => {
+    const handleImageUpload = async (e) => {
         const file = e.target.files[0];
-        if (!file) 
-            return;
-        
+        if (!file) return;
+
         const formData = new FormData();
         formData.append('image', file);
 
@@ -91,55 +82,56 @@ const ProfilePage = () => {
         setIsUploading(false);
     };
 
-    if (!user) 
-        return <p>Loading profile...</p>;
-    
-    /* Users profile and users posts */
+    if (!hasLoaded) return <Asset spinner />;  // Show spinner until user and posts are loaded
+
+    if (!user) return <p>Loading profile...</p>;
+
+    /* Users profile and user's posts */
     return (
         <Container fluid className={styles.profileContainer}>
-          <Row>
-            {/* Left column: Profile card */}
-            <Col xs={12} md={4} lg={3} className={styles.profileSidebar}>
-              <Card className={styles.profileCard}>
-                <Card.Img variant="top" src={defaultProfile} />
-                <Card.Body>
-                  <Card.Title>{user.owner}</Card.Title>
-                  <Card.Text>Bio</Card.Text>
-                  <Button variant="primary">Edit profile</Button>
-                </Card.Body>
-              </Card>
-            </Col>
-      
-            {/* Right column: Posts */}
-            <Col xs={12} md={8} lg={9}>
-              <h3>Your Posts</h3>
-      
-              <Row>
-                {posts.map((post) => (
-                  <Col key={post.id} xs={12} md={6} className="mb-4">
-                    <Card style={{ backgroundColor: '#d7e3fc' }}>
-                      <Card.Img
-                        variant="top"
-                        style={{ objectFit: 'cover', width: '100%', height: '40vh', padding: '2vh' }}
-                        src={post.image}
-                        alt={post.title}
-                      />
-                      <Card.Body>
-                        <Card.Title>{post.title}</Card.Title>
-                        <Card.Text>{post.content}</Card.Text>
-                        <div className="d-flex justify-content-end gap-2 mt-3">
-                          <Button variant="primary" onClick={() => handleEdit(post.id)}>Edit</Button>
-                          <Button variant="danger" onClick={() => handleDelete(post.id)}>Delete</Button>
-                        </div>
-                      </Card.Body>
+            <Row>
+                {/* Left column: Profile card */}
+                <Col xs={12} md={4} lg={3} className={styles.profileSidebar}>
+                    <Card className={styles.profileCard}>
+                        <Card.Img variant="top" src={user.profileImageUrl || defaultProfile} />
+                        <Card.Body>
+                            <Card.Title>{user.owner}</Card.Title>
+                            <Card.Text>{user.bio || "No bio available"}</Card.Text>
+                            <Button variant="primary">Edit profile</Button>
+                        </Card.Body>
                     </Card>
-                  </Col>
-                ))}
-              </Row>
-      
-            </Col>
-          </Row>
+                </Col>
+
+                {/* Right column: Posts */}
+                <Col xs={12} md={8} lg={9}>
+                    <h3>Your Posts</h3>
+
+                    <Row>
+                        {posts.map((post) => (
+                            <Col key={post.id} xs={12} md={6} className="mb-4">
+                                <Card style={{ backgroundColor: '#d7e3fc' }}>
+                                    <Card.Img
+                                        variant="top"
+                                        style={{ objectFit: 'cover', width: '100%', height: '40vh', padding: '1vh' }}
+                                        src={post.image}
+                                        alt={post.title}
+                                    />
+                                    <Card.Body>
+                                        <Card.Title>{post.title}</Card.Title>
+                                        <Card.Text>{post.content}</Card.Text>
+                                        <div className="d-flex justify-content-end gap-2 mt-3">
+                                            <Button variant="primary" onClick={() => handleEdit(post.id)}>Edit</Button>
+                                            <Button variant="danger" onClick={() => handleDelete(post.id)}>Delete</Button>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
+                </Col>
+            </Row>
         </Container>
-      );
-    };
-export default ProfilePage;             
+    );
+};
+
+export default ProfilePage;            

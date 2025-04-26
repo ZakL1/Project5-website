@@ -100,7 +100,7 @@ const PostCreateForm = () => {
                   className="d-flex justify-content-center"
                   htmlFor="image-upload"
                 >
-                  <Image src={defaultPost} />
+                  <Image src={defaultPost} className={styles.ImagePreview} />
                 </Form.Label>
               )}
               <Form.Control

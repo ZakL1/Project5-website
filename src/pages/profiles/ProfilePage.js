@@ -97,44 +97,49 @@ const ProfilePage = () => {
     /* Users profile and users posts */
     return (
         <Container fluid className={styles.profileContainer}>
-            <Row>
-                {/* Left column: Profile card */}
-                <Col xs={12} md={4} lg={3} className={styles.profileSidebar}>
-                    <Card className={styles.profileCard}>
-                        <Card.Img variant="top" src={defaultProfile}/>
-                        <Card.Body>
-                            <Card.Title>{user.owner}</Card.Title>
-                            <Card.Text>Bio</Card.Text>
-                            <Button variant="primary">Edit profile</Button>
-                        </Card.Body>
+          <Row>
+            {/* Left column: Profile card */}
+            <Col xs={12} md={4} lg={3} className={styles.profileSidebar}>
+              <Card className={styles.profileCard}>
+                <Card.Img variant="top" src={defaultProfile} />
+                <Card.Body>
+                  <Card.Title>{user.owner}</Card.Title>
+                  <Card.Text>Bio</Card.Text>
+                  <Button variant="primary">Edit profile</Button>
+                </Card.Body>
+              </Card>
+            </Col>
+      
+            {/* Right column: Posts */}
+            <Col xs={12} md={8} lg={9}>
+              <h3>Your Posts</h3>
+      
+              <Row>
+                {posts.map((post) => (
+                  <Col key={post.id} xs={12} md={6} className="mb-4">
+                    <Card style={{ backgroundColor: '#d7e3fc' }}>
+                      <Card.Img
+                        variant="top"
+                        style={{ objectFit: 'cover', width: '100%', height: '40vh', padding: '2vh' }}
+                        src={post.image}
+                        alt={post.title}
+                      />
+                      <Card.Body>
+                        <Card.Title>{post.title}</Card.Title>
+                        <Card.Text>{post.content}</Card.Text>
+                        <div className="d-flex justify-content-end gap-2 mt-3">
+                          <Button variant="primary" onClick={() => handleEdit(post.id)}>Edit</Button>
+                          <Button variant="danger" onClick={() => handleDelete(post.id)}>Delete</Button>
+                        </div>
+                      </Card.Body>
                     </Card>
-                </Col>
-
-                {/* Right column: Posts */}
-                <Col xs={12} md={8} lg={9}>
-                    <h3>Your Posts</h3>
-                    {posts.map((post) => (
-                        <Card
-                            key={post.id}
-                            className="mb-3"
-                            style={{
-                            backgroundColor: '#d7e3fc'
-                        }}>
-                            <Card.Img variant="top" src={post.image} alt={post.title}/>
-                            <Card.Body>
-                                <Card.Title>{post.title}</Card.Title>
-                                <Card.Text>{post.content}</Card.Text>
-                                <div className="d-flex justify-content-end gap-2 mt-3">
-                                    <Button variant="primary" onClick={() => handleEdit(post.id)}>Edit</Button>
-                                    <Button variant="danger" onClick={() => handleDelete(post.id)}>Delete</Button>
-                                </div>
-                            </Card.Body>
-                        </Card>
-                    ))}
-                </Col>
-            </Row>
+                  </Col>
+                ))}
+              </Row>
+      
+            </Col>
+          </Row>
         </Container>
-    );
-};
-
-export default ProfilePage;
+      );
+    };
+export default ProfilePage;             

@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../../styles/Post.module.css";
 import {useAuth} from "../../contexts/AuthContext";
-import { Card, Figure, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Card, Figure, OverlayTrigger, Tooltip, Form, Container } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import api from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
+import { FaHeart, FaRegHeart, FaThumbsDown, FaComment } from "react-icons/fa";
 
 const Post = (props) => {
   const {
@@ -24,6 +25,10 @@ const Post = (props) => {
     setPosts,
   } = props;
 
+
+  const [showCommentPanel, setShowCommentPanel] = useState(false);
+  const [newComment, setNewComment] = useState("");
+  const [localCommentsCount, setLocalCommentsCount] = useState(comments_count);
   const currentUser = useAuth();
   const is_owner = currentUser?.username === owner;
   const navigate = useNavigate();
@@ -73,7 +78,28 @@ const Post = (props) => {
     }
   };
 
+  const toggleCommentPanel = () => {
+    setShowCommentPanel((prev) => !prev);
+  };
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post("/comments/", {
+        post: id,
+        content: newComment,
+      });
+      setNewComment("");
+      setLocalCommentsCount((prev) => prev + 1);
+      setShowCommentPanel(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
   return (
+    <Container className="d-flex justify-content-center">
     <Card className={styles.Post} style={{ backgroundColor: '#d7e3fc' }}>
       <Card.Body>
         <Figure className="align-items-center justify-content-between">
@@ -108,11 +134,11 @@ const Post = (props) => {
             </OverlayTrigger>
           ) : like_id ? (
             <span onClick={handleUnlike}>
-              <i className={`fas fa-heart ${styles.Heart}`} />
+              <FaRegHeart />
             </span>
           ) : currentUser ? (
             <span onClick={handleLike}>
-              <i className={`far fa-heart ${styles.HeartOutline}`} />
+              <FaHeart className={styles.Heart} />
             </span>
           ) : (
             <OverlayTrigger
@@ -123,13 +149,32 @@ const Post = (props) => {
             </OverlayTrigger>
           )}
           {likes_count}
-          <Link to={`/posts/${id}`}>
-            <i className="far fa-comments" />
-          </Link>
-          {comments_count}
+          <span onClick={toggleCommentPanel}>
+            <FaComment />
+          </span>
+          {localCommentsCount}
         </div>
+        {showCommentPanel && (
+        <div className={styles.CommentPanel}>
+          <Form onSubmit={handleCommentSubmit}>
+            <Form.Group controlId="newComment">
+              <Form.Control
+                as="textarea"
+                rows={2}
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Write a comment..."
+              />
+            </Form.Group>
+            <button className="btn btn-primary btn-sm mt-2" type="submit">
+              Submit Comment
+            </button>
+          </Form>
+        </div>
+      )}
       </Card.Body>
     </Card>
+    </Container>
   );
 };
 

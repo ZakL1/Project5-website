@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 
-import Post from "./Post";
+import Post from "./PostComponent";
 import Asset from "../../components/Asset";
 /*import PopularProfiles from "./profiles/PopularProfiles";*/
 
@@ -43,8 +43,8 @@ function PostsPage({ message, filter = "" }) {
   }, [filter, query, pathname]);
 
   return (
-    <Row className="h-100">
-      <Col className="py-2 p-0 p-lg-2" lg={6}>
+    <Row className="h-100 justify-content-center">
+      <Col className="py-2 p-0 p-lg-2" md={8} lg={6}>
        {/* <div className="d-lg-none mb-3">
           <PopularProfiles mobile />
         </div>

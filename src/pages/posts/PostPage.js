@@ -8,7 +8,7 @@ import Container from "react-bootstrap/Container";
 import appStyles from "../../App.module.css";
 import api from "../../api/axiosDefaults";
 
-import Post from "./Post";
+import Post from "./PostComponent";
 /*import Comment from "../comments/Comment"; */
 /*import CommentCreateForm from "../comments/CommentCreateForm";*/
 

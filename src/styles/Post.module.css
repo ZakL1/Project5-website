@@ -22,3 +22,12 @@
   .HeartOutline:hover {
     color: #f85032;
   }
+
+/* Styling for comment panel */
+.CommentPanel {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}

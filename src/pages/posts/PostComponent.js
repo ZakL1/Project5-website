@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import styles from "../../styles/Post.module.css";
-import {useAuth} from "../../contexts/AuthContext";
-import { Card, Figure, OverlayTrigger, Tooltip, Form, Container } from "react-bootstrap";
+import { useAuth } from "../../contexts/AuthContext";
+import {
+  Card,
+  Figure,
+  OverlayTrigger,
+  Tooltip,
+  Form,
+  Container
+} from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import api from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
-import { FaHeart, FaRegHeart, FaThumbsDown, FaComment } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaComment } from "react-icons/fa";
+import { Alert } from "react-bootstrap";
 
 const Post = (props) => {
   const {
@@ -22,40 +30,35 @@ const Post = (props) => {
     image,
     updated_at,
     postPage,
-    setPosts,
+    setPosts
   } = props;
-
 
   const [showCommentPanel, setShowCommentPanel] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [localCommentsCount, setLocalCommentsCount] = useState(comments_count);
-  const currentUser = useAuth();
+  const { currentUser, token } = useAuth();
   const is_owner = currentUser?.username === owner;
   const navigate = useNavigate();
-
-  const handleEdit = () => {
-    navigate.push(`/posts/${id}/edit`);
-  };
-
-  const handleDelete = async () => {
-    try {
-      await api.delete(`/posts/${id}/`);
-      navigate.goBack();
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const [showLoginMessage, setShowLoginMessage] = useState(false);
 
   const handleLike = async () => {
+    if (!currentUser?.username) {
+      setShowLoginMessage(true);
+      return;
+    }
     try {
       const { data } = await api.post("/likes/", { post: id });
       setPosts((prevPosts) => ({
         ...prevPosts,
-        results: prevPosts.results.map((post) => {
-          return post.id === id
-            ? { ...post, likes_count: post.likes_count + 1, like_id: data.id }
-            : post;
-        }),
+        results: prevPosts.results.map((post) =>
+          post.id === id
+            ? {
+                ...post,
+                likes_count: post.likes_count + 1,
+                like_id: data.id, // Save the new like ID
+              }
+            : post
+        ),
       }));
     } catch (err) {
       console.log(err);
@@ -63,15 +66,23 @@ const Post = (props) => {
   };
 
   const handleUnlike = async () => {
+    if (!currentUser?.username) {
+      setShowLoginMessage(true);
+      return;
+    }
     try {
       await api.delete(`/likes/${like_id}/`);
       setPosts((prevPosts) => ({
         ...prevPosts,
-        results: prevPosts.results.map((post) => {
-          return post.id === id
-            ? { ...post, likes_count: post.likes_count - 1, like_id: null }
-            : post;
-        }),
+        results: prevPosts.results.map((post) =>
+          post.id === id
+            ? {
+                ...post,
+                likes_count: post.likes_count - 1,
+                like_id: null, // Reset like_id
+              }
+            : post
+        ),
       }));
     } catch (err) {
       console.log(err);
@@ -97,83 +108,93 @@ const Post = (props) => {
     }
   };
 
-
   return (
     <Container className="d-flex justify-content-center">
-    <Card className={styles.Post} style={{ backgroundColor: '#d7e3fc' }}>
-      <Card.Body>
-        <Figure className="align-items-center justify-content-between">
-          <Link to={`/profiles/${profile_id}`}>
-            <Avatar src={profile_image} height={55} />
-            {owner}
-          </Link>
-          <div className="d-flex align-items-center">
-            <span>{updated_at}</span>
-            {is_owner && postPage && (
-              <MoreDropdown
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-              />
+      <Card className={styles.Post} style={{ backgroundColor: '#d7e3fc' }}>
+        <Card.Body>
+          <Figure className="align-items-center justify-content-between">
+            <Link to={`/profiles/${profile_id}`}>
+              <Avatar src={profile_image} height={55} /> {owner}
+            </Link>
+            <div className="d-flex align-items-center">
+              <span>{updated_at}</span>
+            </div>
+          </Figure>
+        </Card.Body>
+        <Link to={`/posts/${id}`}>
+          <Card.Img
+            src={image}
+            alt={title}
+            style={{
+              objectFit: 'cover',
+              width: '100%',
+              height: '60vh',
+              padding: '2vh'
+            }}
+          />
+        </Link>
+        <Card.Body>
+          {title && <Card.Title className="text-center">{title}</Card.Title>}
+          {content && <Card.Text>{content}</Card.Text>}
+          <div className={styles.PostBar}>
+            {is_owner ? (
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>You can't like your own post!</Tooltip>}
+              >
+                <span className={styles.DisabledHeart}>
+                  <FaRegHeart />
+                </span>
+              </OverlayTrigger>
+            ) : currentUser ? (
+              like_id ? (
+                <span onClick={handleUnlike}>
+                  <FaHeart className={styles.Heart} /> {/* Filled heart if liked */}
+                </span>
+              ) : (
+                <span onClick={handleLike}>
+                  <FaRegHeart /> {/* Outline heart if not liked */}
+                </span>
+              )
+            ) : (
+              <span onClick={() => setShowLoginMessage(true)}>
+                <FaRegHeart />
+              </span>
             )}
+            {likes_count}
+            <span
+              onClick={() => {
+                if (!currentUser) {
+                  setShowLoginMessage(true);
+                  return;
+                }
+                toggleCommentPanel();
+              }}
+            >
+              <FaComment />
+            </span>
+            {localCommentsCount}
           </div>
-        </Figure>
-      </Card.Body>
-      <Link to={`/posts/${id}`}>
-        <Card.Img src={image} alt={title} style={{ objectFit: 'cover', width: '100%', height: '60vh', padding: '2vh' }} />
-      </Link>
-      <Card.Body>
-        {title && <Card.Title className="text-center">{title}</Card.Title>}
-        {content && <Card.Text>{content}</Card.Text>}
-        <div className={styles.PostBar}>
-          {is_owner ? (
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>You can't like your own post!</Tooltip>}
-            >
-              <i className="far fa-heart" />
-            </OverlayTrigger>
-          ) : like_id ? (
-            <span onClick={handleUnlike}>
-              <FaRegHeart />
-            </span>
-          ) : currentUser ? (
-            <span onClick={handleLike}>
-              <FaHeart className={styles.Heart} />
-            </span>
-          ) : (
-            <OverlayTrigger
-              placement="top"
-              overlay={<Tooltip>Log in to like posts!</Tooltip>}
-            >
-              <i className="far fa-heart" />
-            </OverlayTrigger>
+          {showCommentPanel && (
+            <div className={styles.CommentPanel}>
+              <Form onSubmit={handleCommentSubmit}>
+                <Form.Group controlId="newComment">
+                  <Form.Control
+                    as="textarea"
+                    rows={2}
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder="Write a comment..."
+                  />
+                </Form.Group>
+                <button className="btn btn-primary btn-sm mt-2" type="submit">
+                  Submit Comment
+                </button>
+              </Form>
+            </div>
           )}
-          {likes_count}
-          <span onClick={toggleCommentPanel}>
-            <FaComment />
-          </span>
-          {localCommentsCount}
-        </div>
-        {showCommentPanel && (
-        <div className={styles.CommentPanel}>
-          <Form onSubmit={handleCommentSubmit}>
-            <Form.Group controlId="newComment">
-              <Form.Control
-                as="textarea"
-                rows={2}
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Write a comment..."
-              />
-            </Form.Group>
-            <button className="btn btn-primary btn-sm mt-2" type="submit">
-              Submit Comment
-            </button>
-          </Form>
-        </div>
-      )}
-      </Card.Body>
-    </Card>
+        </Card.Body>
+      </Card>
     </Container>
   );
 };

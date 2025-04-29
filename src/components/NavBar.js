@@ -7,9 +7,16 @@ import { useAuth } from '../contexts/AuthContext';
 import { FaHome, FaUser, FaShare, FaSignInAlt, FaSignOutAlt, FaUserPlus } from "react-icons/fa";
 import shutterLogo from '../assets/shutter.png';
 import Button from 'react-bootstrap/Button';
+import { useNavigate } from 'react-router-dom';
 
 function NavBar() {
-  const { currentUser, handleLogout } = useAuth();
+  const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/signin");
+  }
 
   return (
     <Navbar expand="lg" className={styles.NavBar}>

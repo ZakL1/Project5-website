@@ -41,6 +41,19 @@ const Post = (props) => {
   const navigate = useNavigate();
   const [showLoginMessage, setShowLoginMessage] = useState(false);
 
+/* Make date easier to read */ 
+  function formatDate(isoString) {
+    const d = new Date(isoString);
+    return d.toLocaleString('en-GB', {
+      year:   'numeric',
+      month:  'short',   // “Apr”
+      day:    '2-digit', // “29”
+      hour:   '2-digit',
+      minute: '2-digit',
+    });
+  }
+
+
   const handleLike = async () => {
     if (!currentUser?.username) {
       setShowLoginMessage(true);
@@ -112,15 +125,24 @@ const Post = (props) => {
     <Container className="d-flex justify-content-center">
       <Card className={styles.Post} style={{ backgroundColor: '#d7e3fc' }}>
         <Card.Body>
-          <Figure className="align-items-center justify-content-between">
-            <Link to={`/profiles/${profile_id}`}>
-              <Avatar src={profile_image} height={55} /> {owner}
-            </Link>
-            <div className="d-flex align-items-center">
-              <span>{updated_at}</span>
+          <Figure className="d-flex justify-content-start align-items-start mb-3">
+            <Avatar src={profile_image} height={55} className="me-2" />
+            <div>
+              <Link to={`/profiles/${profile_id}`} className={styles.owner}>
+                {owner}
+              </Link>
+              <div>
+                <small>{ formatDate(updated_at) }</small>
+              </div>
             </div>
           </Figure>
+          {title && (
+            <Card.Title  className="mb-3 text-center" style={{ fontSize: '4vh'}}>
+              {title}
+            </Card.Title>
+          )}
         </Card.Body>
+  
         <Link to={`/posts/${id}`}>
           <Card.Img
             src={image}
@@ -129,13 +151,13 @@ const Post = (props) => {
               objectFit: 'cover',
               width: '100%',
               height: '60vh',
-              padding: '2vh'
+              padding: '2vh',
             }}
           />
-        </Link>
+        </Link>  
+
         <Card.Body>
-          {title && <Card.Title className="text-center">{title}</Card.Title>}
-          {content && <Card.Text>{content}</Card.Text>}
+        {content && <Card.Text>{content}</Card.Text>}
           <div className={styles.PostBar}>
             {is_owner ? (
               <OverlayTrigger
@@ -149,11 +171,11 @@ const Post = (props) => {
             ) : currentUser ? (
               like_id ? (
                 <span onClick={handleUnlike}>
-                  <FaHeart className={styles.Heart} /> {/* Filled heart if liked */}
+                  <FaHeart className={styles.Heart} />
                 </span>
               ) : (
                 <span onClick={handleLike}>
-                  <FaRegHeart /> {/* Outline heart if not liked */}
+                  <FaRegHeart />
                 </span>
               )
             ) : (
@@ -175,6 +197,7 @@ const Post = (props) => {
             </span>
             {localCommentsCount}
           </div>
+  
           {showCommentPanel && (
             <div className={styles.CommentPanel}>
               <Form onSubmit={handleCommentSubmit}>
@@ -184,10 +207,13 @@ const Post = (props) => {
                     rows={2}
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Write a comment..."
+                    placeholder="Write a comment…"
                   />
                 </Form.Group>
-                <button className="btn btn-primary btn-sm mt-2" type="submit">
+                <button
+                  className="btn btn-primary btn-sm mt-2"
+                  type="submit"
+                >
                   Submit Comment
                 </button>
               </Form>
@@ -197,6 +223,5 @@ const Post = (props) => {
       </Card>
     </Container>
   );
-};
-
-export default Post;
+}  
+  export default Post;

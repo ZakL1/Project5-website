@@ -5,6 +5,7 @@ import styles from "../../styles/Profile.module.css";
 import defaultProfile from '../../assets/defaultprofile.png';
 import { useNavigate } from 'react-router-dom';
 import Asset from "../../components/Asset";
+import { useAuth } from "../../contexts/AuthContext";
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
@@ -13,6 +14,7 @@ const ProfilePage = () => {
     const [hasLoaded, setHasLoaded] = useState(false);  // Added hasLoaded state
     const [isUploading, setIsUploading] = useState(false);
     const navigate = useNavigate();
+    const { currentUser } = useAuth();
 
     const handleEdit = (postId) => {
         navigate(`/posts/${postId}/edit`);
@@ -97,7 +99,7 @@ const ProfilePage = () => {
                         <Card.Body>
                             <Card.Title>{user.owner}</Card.Title>
                             <Card.Text>{user.bio || "No bio available"}</Card.Text>
-                            <Button variant="primary">Edit profile</Button>
+                            <Button variant="primary" onClick={() => navigate("/profiles/edit")}>Edit profile</Button>
                         </Card.Body>
                     </Card>
                 </Col>

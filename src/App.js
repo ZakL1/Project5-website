@@ -10,6 +10,7 @@ import PostCreateForm from "./pages/posts/PostCreateForm";
 import PostPage from "./pages/posts/PostPage";
 import PostsPage from "./pages/posts/PostsPage";
 import PostEditForm from "./pages/posts/PostEditForm";
+import ProfileEditForm from "./pages/profiles/ProfileEditForm";
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={< PostsPage />} />
                         <Route path="/profiles/me" element={< ProfilePage />}/>
+                        <Route path="/profiles/edit" element={< ProfileEditForm />} />
                         <Route path="/signin" element={< SignInForm />}/>
                         <Route path="/signup" element={< SignUpForm />}/>
                         <Route path="/posts/create" element={< PostCreateForm />}/>

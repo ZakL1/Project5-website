@@ -4,24 +4,24 @@
     border-radius: 2px;
     margin-bottom: 16px;
     text-align: center;
-  }
+}
   
   .Post figure,
   h5 {
     margin: 0 0;
-  }
+}
   
   .Heart {
     color: #f85032;
-  }
+}
   
   .Heart:hover {
     color: #2142b2;
-  }
+}
   
   .HeartOutline:hover {
     color: #f85032;
-  }
+}
 
 /* Styling for comment panel */
 .CommentPanel {
@@ -30,4 +30,16 @@
     background-color: #f7f7f7;
     border: 1px solid #ccc;
     border-radius: 8px;
+}
+
+/* Post owner */
+.owner {
+  text-decoration: none;
+  color: black;
+  font-family: "Montserrat", sans-serif;
+  font-size: 2vh;
+}
+
+.CardTitle {
+  font-weight: bold;
 }

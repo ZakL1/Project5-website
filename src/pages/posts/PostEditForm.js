@@ -83,13 +83,13 @@ const PostEditForm = () => {
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
-        <Col md={7} lg={8}>
+        <Col xs={12} sm={10} md={8} lg={6} xl={5} className="mx-auto">
           <Container
             className={`${appStyles.Content} ${styles.Container} d-flex flex-column justify-content-center`}
           >
             <Form.Group className="text-center">
               <figure>
-                <Image className={appStyles.Image} src={image} rounded />
+                <Image className={styles.ImagePreview} src={image} rounded />
               </figure>
               <div>
                 <Form.Label

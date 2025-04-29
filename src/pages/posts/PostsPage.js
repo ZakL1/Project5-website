@@ -17,11 +17,13 @@ import NoResults from "../../assets/no-results.png";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { fetchMoreData } from "../../utils/utils"; 
 import api from "../../api/axiosDefaults";
+import { useAuth } from "../../contexts/AuthContext";
 
 function PostsPage({ message, filter = "" }) {
   const [posts, setPosts] = useState({ results: [] });
   const [hasLoaded, setHasLoaded] = useState(false);
   const [query, setQuery] = useState("");
+  const { currentUser } = useAuth();
 
   const { pathname } = useLocation();
 
@@ -40,7 +42,7 @@ function PostsPage({ message, filter = "" }) {
     const timer = setTimeout(fetchPosts, 1000);
 
     return () => clearTimeout(timer);
-  }, [filter, query, pathname]);
+  }, [filter, query, pathname, currentUser]);
 
   return (
     <Row className="h-100 justify-content-center">

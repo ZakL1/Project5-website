@@ -33,20 +33,23 @@ const SignUpForm = () => {
         });
     };
 
-    const handleSubmit = async(event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post("http://127.0.0.1:8000/dj-rest-auth/registration/", signUpData);
-            console.log("Account created successfully:", response.data); // debug log
-            navigate("/signin");
-            console.log("Navigating to Sign In"); // Debug log
+          // 1. Use `api` so baseURL is correct (Heroku in prod, localhost in dev)
+          const { data } = await api.post(
+            "/dj-rest-auth/registration/",
+            signUpData
+          );
+          console.log("Account created successfully:", data);
+          // 2. Redirect to sign-in page
+          navigate("/signin");
         } catch (err) {
-            console.error("Sign-up error:", err.response
-                ?.data); // Debug log
-            setErrors(err.response
-                ?.data);
+          console.error("Sign-up error:", err.response?.data);
+          // DRF returns field-specific errors, e.g. { username: [...], password1: [...], password2: [...] }
+          setErrors(err.response?.data || {});
         }
-    };
+      };
 
     return (
         <Row

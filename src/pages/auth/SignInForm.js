@@ -38,32 +38,38 @@ const SignInForm = () => {
         });
     };
 
-    const handleSubmit = async(event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            // 1. Login and get token
-            const loginRes = await axios.post("http://127.0.0.1:8000/dj-rest-auth/login/", {username, password});
-
-            const token = loginRes.data.key;
-
-            // 2. Set Authorization header globally for axios
-            axios.defaults.headers.common["Authorization"] = `Token ${token}`;
-
-            // 3. Get user profile
-            const profileRes = await axios.get("http://127.0.0.1:8000/profiles/me/");
-
-            // 4. Use login() from context
-            login({token: token, user: profileRes.data});
-
-            // 5. Navigate
-            navigate("/profiles/me/");
+          // 1. Login and get token
+          const { data: loginData } = await api.post(
+            "/dj-rest-auth/login/",
+            {
+              username: credentials.username,
+              password: credentials.password,
+            }
+          );
+    
+          const token = loginData.key;
+          // 2. Save the token in localStorage
+          localStorage.setItem("token", token);
+          // 3. Also set the Authorization header on api
+          api.defaults.headers.common.Authorization = `Token ${token}`;
+    
+          // 4. Fetch the current user's profile
+          const { data: profile } = await api.get("/profiles/me/");
+    
+          // 5. Update auth context
+          login({ token, user: profile });
+    
+          // 6. Redirect
+          navigate("/profiles/me/");
         } catch (err) {
-            console.error("Login error:", err);
-            setErrors(err.response
-                ?.data || {});
+          console.error("Login error:", err);
+          // DRF will return a 400 with { username: [...], password: [...] }
+          setErrors(err.response?.data || { non_field_errors: ["Login failed"] });
         }
-    };
-
+      };
     return (
         <Row className={`align-items-center ${styles.Row}`} style={{ minHeight: "100vh" }}>
             <Col className="my-auto py-2 p-md-2" md={6}>

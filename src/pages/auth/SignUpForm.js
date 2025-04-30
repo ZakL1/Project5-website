@@ -15,6 +15,7 @@ import {
     Container,
     Alert
 } from "react-bootstrap";
+import api from "../../api/axiosDefaults";
 
 const SignUpForm = () => {
     const [signUpData,

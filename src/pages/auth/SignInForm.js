@@ -29,6 +29,11 @@ const SignInForm = () => {
     // AuthContext doesn't have setToken yet, you might want to add it.
     const {login} = useAuth();
 
+    const [credentials, setCredentials] = useState({
+        username: "",
+        password: "",
+      });
+
     const handleChange = (event) => {
         console.log("Input Changed:", event.target.name, event.target.value);
         console.log("Current signInData:", signInData);

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styles from "../../styles/Post.module.css";
 import { useAuth } from "../../contexts/AuthContext";
 import {
@@ -30,11 +31,15 @@ const Post = (props) => {
     image,
     updated_at,
     postPage,
-    setPosts
+    setPosts,
+    postId
   } = props;
-
-  const [showCommentPanel, setShowCommentPanel] = useState(false);
+  
+ 
+  const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [showCommentPanel, setShowCommentPanel] = useState(false);
+
   const [localCommentsCount, setLocalCommentsCount] = useState(comments_count);
   const { currentUser, token } = useAuth();
   const is_owner = currentUser?.username === owner;
@@ -67,8 +72,8 @@ const Post = (props) => {
           post.id === id
             ? {
                 ...post,
-                likes_count: post.likes_count + 1,
-                like_id: data.id, // Save the new like ID
+                likes_count: (post.likes_count || 0) + 1, // ensure number
+                like_id: data.id,
               }
             : post
         ),
@@ -77,7 +82,7 @@ const Post = (props) => {
       console.log(err);
     }
   };
-
+  
   const handleUnlike = async () => {
     if (!currentUser?.username) {
       setShowLoginMessage(true);
@@ -91,8 +96,8 @@ const Post = (props) => {
           post.id === id
             ? {
                 ...post,
-                likes_count: post.likes_count - 1,
-                like_id: null, // Reset like_id
+                likes_count: Math.max((post.likes_count || 1) - 1, 0), // prevent NaN and negative
+                like_id: null,
               }
             : post
         ),
@@ -101,6 +106,21 @@ const Post = (props) => {
       console.log(err);
     }
   };
+
+
+  // Fetch comments for the post
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        if (!postId) return; // Avoid request with undefined
+        const response = await api.get(`/comments/?post=${postId}`);
+        setComments(response.data);
+      } catch (err) {
+        console.error("Error fetching comments:", err);
+      }
+    };
+    fetchComments();
+  }, [postId]);
 
   const toggleCommentPanel = () => {
     setShowCommentPanel((prev) => !prev);
@@ -111,7 +131,7 @@ const Post = (props) => {
     try {
       await api.post("/comments/", {
         post: id,
-        content: newComment,
+        body: newComment,
       });
       setNewComment("");
       setLocalCommentsCount((prev) => prev + 1);
@@ -183,7 +203,7 @@ const Post = (props) => {
                 <FaRegHeart />
               </span>
             )}
-            {likes_count}
+            <span>{likes_count}</span>
             <span
               onClick={() => {
                 if (!currentUser) {
@@ -198,13 +218,14 @@ const Post = (props) => {
             {localCommentsCount}
           </div>
   
+          {/* Comment Panel (conditionally rendered) */}
           {showCommentPanel && (
             <div className={styles.CommentPanel}>
               <Form onSubmit={handleCommentSubmit}>
                 <Form.Group controlId="newComment">
                   <Form.Control
                     as="textarea"
-                    rows={2}
+                    rows={3}
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                     placeholder="Write a comment…"
@@ -217,11 +238,22 @@ const Post = (props) => {
                   Submit Comment
                 </button>
               </Form>
+
+              {/* Displaying Comments */}
+              <div className={styles.CommentList}>
+                {comments.map((comment) => (
+                  <div key={comment.id} className={styles.Comment}>
+                    <strong>{comment.owner}</strong>
+                    <p>{comment.body}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </Card.Body>
       </Card>
     </Container>
   );
-}  
-  export default Post;
+};
+
+export default Post;

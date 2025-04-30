@@ -49,7 +49,7 @@ const ProfilePage = () => {
 
     /* Collects user's profile from API */
     useEffect(() => {
-        api.get('profiles/me/')
+        api.get('api/profiles/me/')
             .then((response) => {
                 console.log('Fetched user profile:', response.data);
                 setUser(response.data);
@@ -70,7 +70,7 @@ const ProfilePage = () => {
 
         setIsUploading(true);
 
-        const res = await fetch('http://127.0.0.1:8000/profiles/me', {
+        const res = await fetch('https://shutter-api-aad07b464590.herokuapp.com/api/profiles/me/', {
             method: 'POST',
             credentials: 'include', // or add auth headers
             body: formData

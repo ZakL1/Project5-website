@@ -26,23 +26,23 @@ const SignInForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // 1. Login and get token
       const { data: loginData } = await api.post("/dj-rest-auth/login/", {
         username,
         password,
       });
+  
       const token = loginData.key;
-
-      // 2. Save token & set Authorization header
       localStorage.setItem("token", token);
       api.defaults.headers.common.Authorization = `Token ${token}`;
-
-      // 3. Fetch current user profile
-      const { data: profile } = await api.get("/profiles/me/");
-
-      // 4. Update context & redirect
-      login({ token, user: profile });
-      navigate("/profiles/me/");
+  
+      const { data: profile } = await api.get("/api/profiles/me/");
+  
+      login({ token, user: profile }); // <-- update context
+  
+      // ✅ Delay to ensure context is updated before navigating
+      setTimeout(() => {
+        navigate("/profiles/me/");
+      }, 100); // slight delay to avoid race condition
     } catch (err) {
       console.error("Login error:", err);
       setErrors(

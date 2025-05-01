@@ -60,8 +60,8 @@ const PostCreateForm = () => {
     }
 
     try {
-      const { data } = await api.post("/posts/", formData);
-      navigate(`/posts/${data.id}`);
+      const { data } = await api.post("api/posts/", formData);
+      navigate(`/`);
     } catch (err) {
       if (err.response?.status !== 401) {
         setErrors(err.response?.data);

@@ -30,7 +30,7 @@ const ProfileEditForm = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const { data } = await api.get("/profiles/me/");
+        const { data } = await api.get("api/profiles/me/");
         setProfileData({
           bio: data.bio || "",
           image: data.profileImageUrl || "",
@@ -67,9 +67,9 @@ const ProfileEditForm = () => {
       formData.append("image", imageInput.current.files[0]);
     }
     try {
-      const { data } = await api.patch("/profiles/me/", formData);
+      const { data } = await api.patch("api/profiles/me/", formData);
       setCurrentUser(data);
-      navigate("/profiles/me");
+      navigate("/profiles/me/");
     } catch (err) {
       if (err.response?.status !== 401) {
         setErrors(err.response?.data);

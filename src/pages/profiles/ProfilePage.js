@@ -25,7 +25,7 @@ const ProfilePage = () => {
         const fetchPosts = async () => {
             try {
                 const response = await api.get('api/posts/');
-                const userPosts = response.data.filter(post => post.owner === user?.owner);
+                const userPosts = response.data.results.filter(post => post.owner === user?.owner)
                 setPosts(userPosts);
             } catch (err) {
                 console.error("Failed to fetch posts", err);
@@ -39,8 +39,10 @@ const ProfilePage = () => {
 
     /* Delete function for owner of posts */
     const handleDelete = async (postId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this post?");
+        if (!confirmDelete) return;
         try {
-            await api.delete(`/posts/${postId}/`);
+            await api.delete(`api/posts/${postId}/`);
             setPosts((prevPosts) => prevPosts.filter(post => post.id !== postId));
         } catch (err) {
             console.error("Failed to delete post", err);

@@ -20,7 +20,12 @@ import api from "../../api/axiosDefaults";
 import { useAuth } from "../../contexts/AuthContext";
 
 function PostsPage({ message, filter = "" }) {
-  const [posts, setPosts] = useState({ results: [] });
+  const [posts, setPosts] = useState({
+    results: [],
+    next: null,
+    previous: null,
+    count: 0,
+  });
   const [hasLoaded, setHasLoaded] = useState(false);
   const [query, setQuery] = useState("");
   const { currentUser } = useAuth();
@@ -31,7 +36,7 @@ function PostsPage({ message, filter = "" }) {
     const fetchPosts = async () => {
       try {
         const { data } = await api.get(`api/posts/?${filter}search=${query}`);
-        setPosts({ data });
+        setPosts(data);
         setHasLoaded(true);
       } catch (err) {
         console.error(err);

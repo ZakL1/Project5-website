@@ -16,6 +16,7 @@ import api from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
 import { FaHeart, FaRegHeart, FaComment } from "react-icons/fa";
 import { Alert } from "react-bootstrap";
+import defaultPic from '../../assets/defaultprofile.png';
 
 const Post = (props) => {
   const {
@@ -65,7 +66,7 @@ const Post = (props) => {
       return;
     }
     try {
-      const { data } = await api.post("/likes/", { post: id });
+      const { data } = await api.post("api/likes/", { post: id });
       setPosts((prevPosts) => ({
         ...prevPosts,
         results: prevPosts.results.map((post) =>
@@ -89,7 +90,7 @@ const Post = (props) => {
       return;
     }
     try {
-      await api.delete(`/likes/${like_id}/`);
+      await api.delete(`/api/likes/${like_id}/`);
       setPosts((prevPosts) => ({
         ...prevPosts,
         results: prevPosts.results.map((post) =>
@@ -113,7 +114,7 @@ const Post = (props) => {
     const fetchComments = async () => {
       try {
         if (!postId) return; // Avoid request with undefined
-        const response = await api.get(`/comments/?post=${postId}`);
+        const response = await api.get(`api/comments/?post=${postId}`);
         setComments(response.data);
       } catch (err) {
         console.error("Error fetching comments:", err);
@@ -129,7 +130,7 @@ const Post = (props) => {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/comments/", {
+      await api.post("api/comments/", {
         post: id,
         body: newComment,
       });
@@ -146,7 +147,11 @@ const Post = (props) => {
       <Card className={styles.Post} style={{ backgroundColor: '#d7e3fc' }}>
         <Card.Body>
           <Figure className="d-flex justify-content-start align-items-start mb-3">
-            <Avatar src={profile_image} height={55} className="me-2" />
+          <Avatar
+            src={profile_image || defaultPic}
+            height={55}
+            className="me-2"
+          />
             <div>
               <Link to={`/profiles/${profile_id}`} className={styles.owner}>
                 {owner}

@@ -8,7 +8,6 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
     if (token && !currentUser) {
       api.get('/dj-rest-auth/user/')
         .then(res => setCurrentUser(res.data))
@@ -17,7 +16,7 @@ export const AuthProvider = ({ children }) => {
           setToken(null);
         });
     }
-  }, [currentUser]);
+  }, [token, currentUser]);
 
   const login = (data) => {
     localStorage.setItem("token", data.token);

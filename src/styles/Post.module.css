@@ -1,21 +1,26 @@
 .Post {
-    background-color: #d7e3fc;
-    border: 1px solid #dadadf;
-    border-radius: 2px;
-    margin-bottom: 16px;
-    text-align: center;
+  background-color: #d7e3fc;
+  border: 1px solid #dadadf;
+  border-radius: 2px;
+  margin-bottom: 16px;
+  text-align: center;
 }
   
-  .Post figure,
-  h5 {
-    margin: 0 0;
+.Post figure,
+h5 {
+  margin: 0 0;
+}
+
+.DisabledHeart {
+  font-size: 3vh;
+}
+
+.Heart {
+  color: #f85032;
+  font-size: 5vh;
 }
   
-  .Heart {
-    color: #f85032;
-}
-  
-  .Heart:hover {
+.Heart:hover {
     color: #2142b2;
 }
   
@@ -25,11 +30,11 @@
 
 /* Styling for comment panel */
 .CommentPanel {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
 /* Post owner */
@@ -67,4 +72,8 @@
   padding: 10px;
   margin-bottom: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.CommentButton {
+  font-size: 3vh;
 }

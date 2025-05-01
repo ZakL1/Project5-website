@@ -16,6 +16,7 @@ import api from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
 import { FaHeart, FaRegHeart, FaComment } from "react-icons/fa";
 import { Alert } from "react-bootstrap";
+import Asset from "../../components/Asset";
 
 const Post = (props) => {
   const {
@@ -39,12 +40,14 @@ const Post = (props) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [showCommentPanel, setShowCommentPanel] = useState(false);
+  const [loadingComments, setLoadingComments] = useState(false);
 
   const [localCommentsCount, setLocalCommentsCount] = useState(comments_count);
   const { currentUser, token } = useAuth();
   const is_owner = currentUser?.username === owner;
   const navigate = useNavigate();
   const [showLoginMessage, setShowLoginMessage] = useState(false);
+
 
 /* Make date easier to read */ 
   function formatDate(isoString) {
@@ -112,25 +115,26 @@ const Post = (props) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        if (!id) return;
+        setLoadingComments(true);
         const response = await api.get(`api/comments/?post=${id}`);
-        // Check if paginated results are returned
-        const fetchedComments = Array.isArray(response.data)
-          ? response.data
-          : response.data.results || [];
-  
-        setComments(fetchedComments);
+        setComments(response.data?.results || []);
       } catch (err) {
         console.error("Error fetching comments:", err);
+      } finally {
+        setLoadingComments(false);
       }
     };
-    fetchComments();
-  }, [id]);
+  
+    if (showCommentPanel && comments.length === 0) {
+      fetchComments();
+    }
+  }, [showCommentPanel, id, comments.length]);
 
   const toggleCommentPanel = () => {
     setShowCommentPanel((prev) => !prev);
   };
 
+  /* Handles comment creation */
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -146,28 +150,43 @@ const Post = (props) => {
     }
   };
 
+  /* Handles comment deletion */
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await api.delete(`/api/comments/${commentId}/`);
+      setComments((prev) => prev.filter((c) => c.id !== commentId));
+      setLocalCommentsCount((prev) => Math.max(prev - 1, 0));
+    } catch (err) {
+      console.error("Failed to delete comment:", err);
+    }
+  };
+
   return (
     <Container className="d-flex justify-content-center">
-      <Card className={styles.Post} style={{ backgroundColor: '#d7e3fc' }}>
+      <Card className={styles.Post} style={{ backgroundColor: "#d7e3fc" }}>
         <Card.Body>
           <Figure className="d-flex justify-content-start align-items-start mb-3">
-          <Avatar
-            src={profile_image?.startsWith("http") ? profile_image 
-              : "https://res.cloudinary.com/dvajuxx87/image/upload/v1746104198/defaultprofile_hwuglk.jpg"}
-            height={55}
-            className="me-2"
-          />
+            <Avatar
+              src={
+                profile_image?.startsWith("http")
+                  ? profile_image
+                  : "https://res.cloudinary.com/dvajuxx87/image/upload/v1746104198/defaultprofile_hwuglk.jpg"
+              }
+              height={55}
+              className="me-2"
+            />
             <div>
               <Link to={`/profiles/${profile_id}`} className={styles.owner}>
                 {owner}
               </Link>
               <div>
-                <small>{ formatDate(updated_at) }</small>
+                <small>{formatDate(updated_at)}</small>
               </div>
             </div>
           </Figure>
+  
           {title && (
-            <Card.Title  className="mb-3 text-center" style={{ fontSize: '4vh'}}>
+            <Card.Title className="mb-3 text-center" style={{ fontSize: "4vh" }}>
               {title}
             </Card.Title>
           )}
@@ -178,24 +197,25 @@ const Post = (props) => {
             src={image}
             alt={title}
             style={{
-              objectFit: 'cover',
-              width: '100%',
-              height: '60vh',
-              padding: '2vh',
+              objectFit: "cover",
+              width: "100%",
+              height: "60vh",
+              padding: "2vh",
             }}
           />
-        </Link>  
-
+        </Link>
+  
         <Card.Body>
-        {content && <Card.Text>{content}</Card.Text>}
-          <div className={styles.PostBar}>
+          {content && <Card.Text>{content}</Card.Text>}
+  
+          <div className={`d-flex justify-content-end align-items-center gap-3 ${styles.PostBar}`}>
             {is_owner ? (
               <OverlayTrigger
                 placement="top"
                 overlay={<Tooltip>You can't like your own post!</Tooltip>}
               >
                 <span className={styles.DisabledHeart}>
-                  <FaRegHeart />
+                  <FaRegHeart/>
                 </span>
               </OverlayTrigger>
             ) : currentUser ? (
@@ -205,7 +225,7 @@ const Post = (props) => {
                 </span>
               ) : (
                 <span onClick={handleLike}>
-                  <FaRegHeart />
+                  <FaRegHeart className={styles.DisabledHeart}/>
                 </span>
               )
             ) : (
@@ -223,12 +243,12 @@ const Post = (props) => {
                 toggleCommentPanel();
               }}
             >
-              <FaComment />
+              <FaComment className={styles.CommentButton}/>
             </span>
             {localCommentsCount}
           </div>
   
-          {/* Comment Panel (conditionally rendered) */}
+          {/* Comment Panel */}
           {showCommentPanel && (
             <div className={styles.CommentPanel}>
               <Form onSubmit={handleCommentSubmit}>
@@ -241,22 +261,34 @@ const Post = (props) => {
                     placeholder="Write a comment…"
                   />
                 </Form.Group>
-                <button
-                  className="btn btn-primary btn-sm mt-2"
-                  type="submit"
-                >
+                <button className="btn btn-primary btn-sm mt-2" type="submit">
                   Submit Comment
                 </button>
               </Form>
-
-              {/* Displaying Comments */}
+  
               <div className={styles.CommentList}>
-                {comments.map((comment) => (
-                  <div key={comment.id} className={styles.Comment}>
-                    <strong>{comment.owner}</strong>
-                    <p>{comment.body}</p>
-                  </div>
-                ))}
+                {loadingComments ? (
+                  <Asset spinner />
+                ) : (
+                  comments.map((comment) => (
+                    <div key={comment.id} className={styles.Comment}>
+                      <div className="d-flex justify-content-between align-items-start">
+                        <div>
+                          <strong>{comment.owner}</strong>
+                          <p className="mb-1">{comment.body}</p>
+                        </div>
+                        {currentUser?.username === comment.owner && (
+                          <button
+                            onClick={() => handleDeleteComment(comment.id)}
+                            className="btn btn-sm btn-outline-danger"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           )}

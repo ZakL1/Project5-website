@@ -1,12 +1,14 @@
 import React from "react";
 import styles from "../styles/Avatar.module.css";
 
-const Avatar = ({ src, height = 45, text, className = "" }) => {
+const DEFAULT_IMAGE = "https://res.cloudinary.com/dvajuxx87/image/upload/v1746104198/defaultprofile_hwuglk.jpg";
+
+const Avatar = ({ src, height = 45, text }) => {
   return (
     <span>
       <img
-        className={`${styles.Avatar} ${className}`}
-        src={src}
+        className={styles.Avatar}
+        src={src || DEFAULT_IMAGE}
         height={height}
         width={height}
         alt="avatar"

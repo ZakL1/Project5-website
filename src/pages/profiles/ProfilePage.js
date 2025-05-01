@@ -97,7 +97,14 @@ const ProfilePage = () => {
                 {/* Left column: Profile card */}
                 <Col xs={12} md={4} lg={3} className={styles.profileSidebar}>
                     <Card className={styles.profileCard}>
-                        <Card.Img variant="top" src={user.profileImageUrl || defaultProfile} />
+                    <Card.Img
+                      variant="top"
+                      src={
+                        user.image?.startsWith("http")
+                        ? user.image
+                        : "https://res.cloudinary.com/dvajuxx87/image/upload/v1746104198/defaultprofile_hwuglk.jpg"
+                    }
+                />
                         <Card.Body>
                             <Card.Title>{user.owner}</Card.Title>
                             <Card.Text>{user.bio || "No bio available"}</Card.Text>

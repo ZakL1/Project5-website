@@ -90,6 +90,22 @@ const ProfilePage = () => {
 
     if (!user) return <p>Loading profile...</p>;
 
+    /* Delete profile handle */
+    const handleProfileDelete = async () => {
+        const confirmDelete = window.confirm(
+          "Are you sure you want to delete your profile? This cannot be undone."
+        );
+        if (!confirmDelete) return;
+      
+        try {
+          await api.delete(`api/profiles/${user.id}/`);
+          alert("Profile deleted.");
+          navigate("/"); // or redirect to login/signup page
+        } catch (err) {
+          console.error("Failed to delete profile", err);
+        }
+      };
+
     /* Users profile and user's posts */
     return (
         <Container fluid className={styles.profileContainer}>
@@ -108,6 +124,8 @@ const ProfilePage = () => {
                         <Card.Body>
                             <Card.Title>{user.owner}</Card.Title>
                             <Card.Text>{user.bio || "No bio available"}</Card.Text>
+                            <Button variant="danger" onClick={handleProfileDelete} className="ms-2">
+                             Delete Profile </Button>
                             <Button variant="primary" onClick={() => navigate("/profiles/edit")}>Edit profile</Button>
                         </Card.Body>
                     </Card>

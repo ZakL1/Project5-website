@@ -30,8 +30,8 @@ function PostsPage({ message, filter = "" }) {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const { data } = await api.get(`/posts/?${filter}search=${query}`);
-        setPosts({ results: data });
+        const { data } = await api.get(`api/posts/?${filter}search=${query}`);
+        setPosts({ data });
         setHasLoaded(true);
       } catch (err) {
         console.error(err);

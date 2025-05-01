@@ -31,7 +31,7 @@ const PostEditForm = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const { data } = await api.get(`/posts/${id}/`);
+        const { data } = await api.get(`api/posts/${id}/`);
         const { title, content, image, is_owner } = data;
 
         is_owner ? setPostData({ title, content, image }) : navigate("/");
@@ -71,8 +71,8 @@ const PostEditForm = () => {
     }
 
     try {
-      await api.put(`/posts/${id}/`, formData);
-      navigate(`/posts/${id}`);
+      await api.put(`api/posts/${id}/`, formData);
+      navigate(`/`);
     } catch (err) {
       if (err.response?.status !== 401) {
         setErrors(err.response?.data);

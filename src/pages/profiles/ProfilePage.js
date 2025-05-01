@@ -24,7 +24,7 @@ const ProfilePage = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await api.get('/posts/');
+                const response = await api.get('api/posts/');
                 const userPosts = response.data.filter(post => post.owner === user?.owner);
                 setPosts(userPosts);
             } catch (err) {

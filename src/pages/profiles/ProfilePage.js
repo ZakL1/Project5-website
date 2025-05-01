@@ -6,6 +6,7 @@ import defaultProfile from '../../assets/defaultprofile.png';
 import { useNavigate } from 'react-router-dom';
 import Asset from "../../components/Asset";
 import { useAuth } from "../../contexts/AuthContext";
+import { FaTrashAlt, FaEdit } from "react-icons/fa";
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
@@ -124,9 +125,11 @@ const ProfilePage = () => {
                         <Card.Body>
                             <Card.Title>{user.owner}</Card.Title>
                             <Card.Text>{user.bio || "No bio available"}</Card.Text>
+                            <div className="d-flex justify-content-center gap-2 mt-3">
+                            <Button variant="primary" onClick={() => navigate("/profiles/edit")}><FaEdit /></Button>
                             <Button variant="danger" onClick={handleProfileDelete} className="ms-2">
-                             Delete Profile </Button>
-                            <Button variant="primary" onClick={() => navigate("/profiles/edit")}>Edit profile</Button>
+                            <FaTrashAlt/></Button>                           
+                            </div>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -149,8 +152,8 @@ const ProfilePage = () => {
                                         <Card.Title>{post.title}</Card.Title>
                                         <Card.Text>{post.content}</Card.Text>
                                         <div className="d-flex justify-content-end gap-2 mt-3">
-                                            <Button variant="primary" onClick={() => handleEdit(post.id)}>Edit</Button>
-                                            <Button variant="danger" onClick={() => handleDelete(post.id)}>Delete</Button>
+                                            <Button variant="primary" onClick={() => handleEdit(post.id)}><FaEdit /></Button>
+                                            <Button variant="danger" onClick={() => handleDelete(post.id)}><FaTrashAlt/></Button>
                                         </div>
                                     </Card.Body>
                                 </Card>

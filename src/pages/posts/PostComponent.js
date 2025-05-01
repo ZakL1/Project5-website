@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import api from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../components/MoreDropdown";
-import { FaHeart, FaRegHeart, FaComment } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaComment, FaTrashAlt, FaPaperPlane } from "react-icons/fa";
 import { Alert } from "react-bootstrap";
 import Asset from "../../components/Asset";
 
@@ -112,7 +112,6 @@ const Post = (props) => {
 
 
   // Fetch comments for the post
-  useEffect(() => {
     const fetchComments = async () => {
       try {
         setLoadingComments(true);
@@ -125,10 +124,11 @@ const Post = (props) => {
       }
     };
   
-    if (showCommentPanel && comments.length === 0) {
-      fetchComments();
-    }
-  }, [showCommentPanel, id, comments.length]);
+    useEffect(() => {
+      if (showCommentPanel && comments.length === 0) {
+        fetchComments();
+      }
+    }, [showCommentPanel, id, comments.length]);
 
   const toggleCommentPanel = () => {
     setShowCommentPanel((prev) => !prev);
@@ -144,7 +144,7 @@ const Post = (props) => {
       });
       setNewComment("");
       setLocalCommentsCount((prev) => prev + 1);
-      setShowCommentPanel(false);
+      fetchComments(); // <-- this is the key part
     } catch (err) {
       console.error(err);
     }
@@ -152,6 +152,8 @@ const Post = (props) => {
 
   /* Handles comment deletion */
   const handleDeleteComment = async (commentId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this comment?");
+    if (!confirmDelete) return;
     try {
       await api.delete(`/api/comments/${commentId}/`);
       setComments((prev) => prev.filter((c) => c.id !== commentId));
@@ -261,10 +263,13 @@ const Post = (props) => {
                     placeholder="Write a comment…"
                   />
                 </Form.Group>
-                <button className="btn btn-primary btn-sm mt-2" type="submit">
-                  Submit Comment
-                </button>
-              </Form>
+                <div className="d-flex justify-content-end">
+                  <button className="btn btn-primary btn-sm mt-2" type="submit">
+                    <FaPaperPlane />
+                  </button>
+                </div>
+                </Form>
+              
   
               <div className={styles.CommentList}>
                 {loadingComments ? (
@@ -282,7 +287,7 @@ const Post = (props) => {
                             onClick={() => handleDeleteComment(comment.id)}
                             className="btn btn-sm btn-outline-danger"
                           >
-                            Delete
+                            <FaTrashAlt />
                           </button>
                         )}
                       </div>

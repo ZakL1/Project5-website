@@ -197,7 +197,7 @@ refresh the page to like and comment on posts
   - In Heroku create app and link with github 
   - Add procfile to your repository
   - Install gunicorn to your repository
-  - In codestar settings add herokuapp to allowed hosts
+  - In project5 settings add herokuapp to allowed hosts
   - When in heroku go to deploy branch and click deploy main
 
 The live link can be found here - https://shutter-main-990a60fdcc03.herokuapp.com/

@@ -76,6 +76,16 @@ Shutter is designed to be intuitive, fully responsive, and user-friendly—wheth
 
 ![Sign Up](src/assets/signup.PNG)
 
+## Components
+
+-  __Asset__
+- Reused component to show when things like posts were loading, this is good ux because the users can see the page hasn't
+frozen and that the posts are loading.
+
+- __NavBar__
+- Reused the NavBar across all pages, this is essential because this is how the user navigates throughout the page so it
+needs to be smooth, quick and easy to use
+
 
 ## User Stories
 
@@ -185,6 +195,26 @@ refresh the page to like and comment on posts
 - The ability to go to other users accounts 
 - Upload videos with audio
 - Remember me button for quick and easy sign in
+
+## Technologies & Libraries 
+
+- React: Core front-end library for building the UI
+
+- React Router DOM:	Handling navigation and routing between pages
+
+- Axios: Sending HTTP requests to the backend API
+
+- React Bootstrap: Styling and layout using Bootstrap components in React
+
+- Bootstrap: Core CSS framework for layout and responsive design
+
+- React Icons: Adding icons (for like, comment, delete, edit)
+
+- classnames: Conditional CSS class handling 
+
+- react-infinite-scroll-component:	Enables infinite scrolling on the post list
+
+- eslint: Code quality and formatting linting 
 
 ## Deployment
 

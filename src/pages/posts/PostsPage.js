@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
@@ -8,7 +8,6 @@ import Container from "react-bootstrap/Container";
 
 import Post from "./PostComponent";
 import Asset from "../../components/Asset";
-/*import PopularProfiles from "./profiles/PopularProfiles";*/
 
 import appStyles from "../../App.module.css";
 import styles from "../../styles/PostsPage.module.css";
@@ -31,7 +30,10 @@ function PostsPage({ message, filter = "" }) {
   const { currentUser } = useAuth();
 
   const { pathname } = useLocation();
+  const location = useLocation();
+  const navigate = useNavigate();
 
+  // Fetch all posts
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -42,21 +44,31 @@ function PostsPage({ message, filter = "" }) {
         console.error(err);
       }
     };
-
+  
     setHasLoaded(false);
     const timer = setTimeout(fetchPosts, 1000);
-
+  
+    if (location.state?.refreshPosts) {
+      clearTimeout(timer);
+      fetchPosts();
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  
     return () => clearTimeout(timer);
-  }, [filter, query, pathname, currentUser]);
+  
+  }, [
+    filter,
+    query,
+    pathname,
+    location.pathname,
+    location.state?.refreshPosts,
+    navigate,
+    currentUser,
+  ]);
 
   return (
     <Row className="h-100 justify-content-center">
       <Col className="py-2 p-0 p-lg-2" md={8} lg={6}>
-       {/* <div className="d-lg-none mb-3">
-          <PopularProfiles mobile />
-        </div>
-      */}
-        {/* Search bar */}
         <div className={styles.SearchBarWrapper}>
           <i className={`fas fa-search ${styles.SearchIcon}`} />
           <Form onSubmit={(e) => e.preventDefault()} className={styles.SearchBar}>
@@ -93,9 +105,6 @@ function PostsPage({ message, filter = "" }) {
         )}
       </Col>
 
-      {/* <Col md={4} className="d-none d-lg-block p-0 p-lg-2">
-        <PopularProfiles />
-      </Col>  */}
     </Row>
   );
 }

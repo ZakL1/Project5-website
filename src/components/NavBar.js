@@ -6,7 +6,6 @@ import { NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { FaHome, FaUser, FaShare, FaSignInAlt, FaSignOutAlt, FaUserPlus } from "react-icons/fa";
 import shutterLogo from '../assets/shutter.png';
-import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 
 function NavBar() {

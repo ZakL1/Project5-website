@@ -37,10 +37,10 @@ const SignUpForm = () => {
     }));
   };
 
+  // Handle sign up submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Use the shared `api` instance so the baseURL is correct
       const { data } = await api.post(
         "/dj-rest-auth/registration/",
         signUpData
@@ -49,7 +49,6 @@ const SignUpForm = () => {
       navigate("/signin");
     } catch (err) {
       console.error("Sign-up error:", err.response?.data);
-      // Map DRF field errors into our local `errors` state
       setErrors(err.response?.data || {
         non_field_errors: ["Something went wrong, please try again."],
       });

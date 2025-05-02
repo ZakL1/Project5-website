@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axiosDefaults";
 
@@ -36,12 +36,13 @@ const PostCreateForm = () => {
     });
   };
 
+  // Handle image changes
   const handleChangeImage = (event) => {
     if (event.target.files.length) {
       const file = event.target.files[0];
       setImageFile(file);
 
-      // Revoke old preview URL to avoid memory leaks
+
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
       }
@@ -60,8 +61,8 @@ const PostCreateForm = () => {
     }
 
     try {
-      const { data } = await api.post("api/posts/", formData);
-      navigate(`/`);
+      await api.post("api/posts/", formData);
+      navigate('/', { state: { refreshPosts: true } });
     } catch (err) {
       if (err.response?.status !== 401) {
         setErrors(err.response?.data);

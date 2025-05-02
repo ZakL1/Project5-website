@@ -28,6 +28,7 @@ const PostEditForm = () => {
 
   const { title, content, image } = postData;
 
+  // Fetch post
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -60,6 +61,7 @@ const PostEditForm = () => {
     }
   };
 
+  // Handle post edits
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();

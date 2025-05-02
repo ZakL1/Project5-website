@@ -27,6 +27,7 @@ const ProfileEditForm = () => {
 
   const { bio, image } = profileData;
 
+  // Fetch profile
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -42,13 +43,7 @@ const ProfileEditForm = () => {
     fetchProfile();
   }, []);
 
-  const handleChange = (e) => {
-    setProfileData({
-      ...profileData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
+  // Change profile image
   const handleChangeImage = (e) => {
     if (e.target.files.length) {
       URL.revokeObjectURL(image);
@@ -59,6 +54,7 @@ const ProfileEditForm = () => {
     }
   };
 
+  // Submit profile changes
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -123,16 +119,7 @@ const ProfileEditForm = () => {
               </Alert>
             ))}
 
-            <Form.Group>
-              <Form.Label>Bio</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={4}
-                name="bio"
-                value={bio}
-                onChange={handleChange}
-              />
-            </Form.Group>
+
             {errors.bio?.map((msg, idx) => (
               <Alert variant="warning" key={idx}>
                 {msg}

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "../../styles/Post.module.css";
 import { useAuth } from "../../contexts/AuthContext";
 import {
@@ -8,14 +7,13 @@ import {
   OverlayTrigger,
   Tooltip,
   Form,
-  Container
+  Container,
+  Alert,
 } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Avatar from "../../components/Avatar";
 import api from "../../api/axiosDefaults";
-import { MoreDropdown } from "../../components/MoreDropdown";
 import { FaHeart, FaRegHeart, FaComment, FaTrashAlt, FaPaperPlane } from "react-icons/fa";
-import { Alert } from "react-bootstrap";
 import Asset from "../../components/Asset";
 
 const Post = (props) => {
@@ -31,37 +29,30 @@ const Post = (props) => {
     content,
     image,
     updated_at,
-    postPage,
     setPosts,
-    postId
   } = props;
-  
- 
+
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [showCommentPanel, setShowCommentPanel] = useState(false);
   const [loadingComments, setLoadingComments] = useState(false);
-
   const [localCommentsCount, setLocalCommentsCount] = useState(comments_count);
-  const { currentUser, token } = useAuth();
+  const { currentUser } = useAuth();
   const is_owner = currentUser?.username === owner;
-  const navigate = useNavigate();
   const [showLoginMessage, setShowLoginMessage] = useState(false);
 
-
-/* Make date easier to read */ 
   function formatDate(isoString) {
     const d = new Date(isoString);
-    return d.toLocaleString('en-GB', {
-      year:   'numeric',
-      month:  'short',   // “Apr”
-      day:    '2-digit', // “29”
-      hour:   '2-digit',
-      minute: '2-digit',
+    return d.toLocaleString("en-GB", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   }
 
-
+  // Handle likes on a post
   const handleLike = async () => {
     if (!currentUser?.username) {
       setShowLoginMessage(true);
@@ -75,7 +66,7 @@ const Post = (props) => {
           post.id === id
             ? {
                 ...post,
-                likes_count: (post.likes_count || 0) + 1, // ensure number
+                likes_count: (post.likes_count || 0) + 1,
                 like_id: data.id,
               }
             : post
@@ -85,7 +76,8 @@ const Post = (props) => {
       console.log(err);
     }
   };
-  
+
+  // Handle unliking posts
   const handleUnlike = async () => {
     if (!currentUser?.username) {
       setShowLoginMessage(true);
@@ -99,7 +91,7 @@ const Post = (props) => {
           post.id === id
             ? {
                 ...post,
-                likes_count: Math.max((post.likes_count || 1) - 1, 0), // prevent NaN and negative
+                likes_count: Math.max((post.likes_count || 1) - 1, 0),
                 like_id: null,
               }
             : post
@@ -110,31 +102,30 @@ const Post = (props) => {
     }
   };
 
-
-  // Fetch comments for the post
-    const fetchComments = async () => {
-      try {
-        setLoadingComments(true);
-        const response = await api.get(`api/comments/?post=${id}`);
-        setComments(response.data?.results || []);
-      } catch (err) {
-        console.error("Error fetching comments:", err);
-      } finally {
-        setLoadingComments(false);
-      }
-    };
+  // Fetch comments on posts
+  const fetchComments = useCallback(async () => {
+    try {
+      setLoadingComments(true);
+      const response = await api.get(`api/comments/?post=${id}`);
+      setComments(response.data?.results || []);
+    } catch (err) {
+      console.error("Error fetching comments:", err);
+    } finally {
+      setLoadingComments(false);
+    }
+  }, [id]);
   
-    useEffect(() => {
-      if (showCommentPanel && comments.length === 0) {
-        fetchComments();
-      }
-    }, [showCommentPanel, id, comments.length]);
+  useEffect(() => {
+    if (showCommentPanel && comments.length === 0) {
+      fetchComments();
+    }
+  }, [showCommentPanel, comments.length, fetchComments]);
 
   const toggleCommentPanel = () => {
     setShowCommentPanel((prev) => !prev);
   };
 
-  /* Handles comment creation */
+  // Handle comment creation
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -144,13 +135,13 @@ const Post = (props) => {
       });
       setNewComment("");
       setLocalCommentsCount((prev) => prev + 1);
-      fetchComments(); // <-- this is the key part
+      fetchComments();
     } catch (err) {
       console.error(err);
     }
   };
 
-  /* Handles comment deletion */
+  // Handle comment deletion
   const handleDeleteComment = async (commentId) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this comment?");
     if (!confirmDelete) return;
@@ -186,14 +177,14 @@ const Post = (props) => {
               </div>
             </div>
           </Figure>
-  
+
           {title && (
             <Card.Title className="mb-3 text-center" style={{ fontSize: "4vh" }}>
               {title}
             </Card.Title>
           )}
         </Card.Body>
-  
+
         <Link to={`/posts/${id}`}>
           <Card.Img
             src={image}
@@ -206,10 +197,10 @@ const Post = (props) => {
             }}
           />
         </Link>
-  
+
         <Card.Body>
           {content && <Card.Text>{content}</Card.Text>}
-  
+
           <div className={`d-flex justify-content-end align-items-center gap-3 ${styles.PostBar}`}>
             {is_owner ? (
               <OverlayTrigger
@@ -217,7 +208,7 @@ const Post = (props) => {
                 overlay={<Tooltip>You can't like your own post!</Tooltip>}
               >
                 <span className={styles.DisabledHeart}>
-                  <FaRegHeart/>
+                  <FaRegHeart />
                 </span>
               </OverlayTrigger>
             ) : currentUser ? (
@@ -227,7 +218,7 @@ const Post = (props) => {
                 </span>
               ) : (
                 <span onClick={handleLike}>
-                  <FaRegHeart className={styles.DisabledHeart}/>
+                  <FaRegHeart className={styles.DisabledHeart} />
                 </span>
               )
             ) : (
@@ -245,11 +236,23 @@ const Post = (props) => {
                 toggleCommentPanel();
               }}
             >
-              <FaComment className={styles.CommentButton}/>
+              <FaComment className={styles.CommentButton} />
             </span>
             {localCommentsCount}
           </div>
-  
+
+          {/* Show login prompt if needed */}
+          {!currentUser && showLoginMessage && (
+            <Alert
+              variant="warning"
+              onClose={() => setShowLoginMessage(false)}
+              dismissible
+              className="mt-2"
+            >
+              Please <Link to="/signin">log in</Link> or <Link to="/signup">create an account</Link> to like or comment.
+            </Alert>
+          )}
+
           {/* Comment Panel */}
           {showCommentPanel && (
             <div className={styles.CommentPanel}>
@@ -268,9 +271,8 @@ const Post = (props) => {
                     <FaPaperPlane />
                   </button>
                 </div>
-                </Form>
-              
-  
+              </Form>
+
               <div className={styles.CommentList}>
                 {loadingComments ? (
                   <Asset spinner />

@@ -23,6 +23,7 @@ const SignInForm = () => {
     }));
   };
 
+  // Handle sign in submit
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -37,9 +38,8 @@ const SignInForm = () => {
   
       const { data: profile } = await api.get("/api/profiles/me/");
   
-      login({ token, user: profile }); // <-- update context
+      login({ token, user: profile });
   
-      // ✅ Delay to ensure context is updated before navigating
       setTimeout(() => {
         navigate("/profiles/me/");
       }, 100); // slight delay to avoid race condition

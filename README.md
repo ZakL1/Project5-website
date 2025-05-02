@@ -176,6 +176,11 @@ a light and simplistic feel so went with blue and used react icons.
 
 - Did not have time to implement this
 
+## Not fixed bugs
+
+- the logout feature works but the user has to manually logout, if they close the page and don't logout they will stay logged in
+when they re-open the page. I ran out of time to fix this and it is an example of poor safety features.
+
 ### Validator Testing 
 
 - CSS

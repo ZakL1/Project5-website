@@ -228,12 +228,52 @@ refresh the page to like and comment on posts
   - From the source section drop-down menu, select the Master Branch
   - Once the master branch has been selected, the page will be automatically refreshed with a detailed ribbon display to indicate the successful deployment. 
 
-- The site was deployed to Heroku. The steps to deploy are as follows: 
-  - In Heroku create app and link with github 
-  - Add procfile to your repository
-  - Install gunicorn to your repository
-  - In project5 settings add herokuapp to allowed hosts
-  - When in heroku go to deploy branch and click deploy main
+1. **Ensure Build Output is Ready**
+
+- Run the following command to create an optimized production build of your app:
+
+  - Run this command in the terminal
+  - npm run build
+  
+  - This will generate a `build/` folder containing all the necessary static files for deployment.
+
+
+### 🌐 Deploying to Heroku
+
+1. **Create a New App on Heroku**
+
+   - Go to [Heroku Dashboard](https://dashboard.heroku.com/)
+   - Click **"New" > "Create new app"**
+   - Enter a name (e.g., `Shutter`)
+   - Choose your region and click **Create app**
+
+2. **Connect to GitHub**
+
+   - In your Heroku app, go to the **Deploy** tab
+   - Choose **GitHub** as the deployment method
+   - Connect your GitHub account if prompted
+   - Search for and connect the correct repository
+
+3. **Set the Buildpack for Static Sites**
+
+   - Go to the **Settings** tab in Heroku
+   - Under **Buildpacks**, click **Add Buildpack**
+   - Select:  
+     ```
+     https://github.com/heroku/heroku-buildpack-static
+     ```
+   - Make sure it's listed above any other buildpacks
+ 
+
+### 🚀 Deploy the App
+
+1. Go to the **Deploy** tab
+2. Under **Manual deploy**, select your branch (e.g., `main`)
+3. Click **Deploy Branch**
+
+Heroku will fetch your repo, use the static buildpack, and serve the `build/` folder as a static site.
+
+---
 
 The live link can be found here - https://shutter-main-990a60fdcc03.herokuapp.com/
 

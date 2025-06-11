@@ -20,7 +20,6 @@ const Post = (props) => {
   const {
     id,
     owner,
-    profile_id,
     profile_image,
     comments_count,
     likes_count,
@@ -169,9 +168,7 @@ const Post = (props) => {
               className="me-2"
             />
             <div>
-              <Link to={`/profiles/${profile_id}`} className={styles.owner}>
-                {owner}
-              </Link>
+                {owner}             
               <div>
                 <small>{formatDate(updated_at)}</small>
               </div>
@@ -185,7 +182,6 @@ const Post = (props) => {
           )}
         </Card.Body>
 
-        <Link to={`/posts/${id}`}>
           <Card.Img
             src={image}
             alt={title}
@@ -196,7 +192,6 @@ const Post = (props) => {
               padding: "2vh",
             }}
           />
-        </Link>
 
         <Card.Body>
           {content && <Card.Text>{content}</Card.Text>}

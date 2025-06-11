@@ -50,25 +50,34 @@ const PostCreateForm = () => {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const formData = new FormData();
+const handleSubmit = async (event) => {
+  event.preventDefault();
 
-    formData.append("title", title);
-    formData.append("content", content);
-    if (imageFile) {
-      formData.append("image", imageFile);
-    }
+  // Frontend validation
+  const validationErrors = {};
+  if (!title.trim()) validationErrors.title = ["Title is required."];
+  if (!content.trim()) validationErrors.content = ["Content is required."];
+  if (!imageFile) validationErrors.image = ["Image is required."];
 
-    try {
-      await api.post("api/posts/", formData);
-      navigate('/', { state: { refreshPosts: true } });
-    } catch (err) {
-      if (err.response?.status !== 401) {
-        setErrors(err.response?.data);
-      }
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("content", content);
+  formData.append("image", imageFile);
+
+  try {
+    await api.post("api/posts/", formData);
+    navigate("/", { state: { refreshPosts: true } });
+  } catch (err) {
+    if (err.response?.status !== 401) {
+      setErrors(err.response?.data);
     }
-  };
+  }
+};
 
   return (
     <Form onSubmit={handleSubmit}>

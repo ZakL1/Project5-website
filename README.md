@@ -234,14 +234,22 @@ refresh the page to like and comment on posts
 
   - Run this command in the terminal
   - npm run build
-  
   - This will generate a `build/` folder containing all the necessary static files for deployment.
+
+  - Install gunicorn in your django frontend terminal by typing:
+  - pip install gunicorn
+  - pip freeze > requiremtns.txt
+
+  - Now create a new file in the root directory called 'Procfile', no extensions
+  - Add the follwing code to the file:
+  - web: gunicorn your_project_name.wsgi
 
 
 ### 🌐 Deploying to Heroku
 
 1. **Create a New App on Heroku**
 
+   - Create a heroku account (if you don't have one)
    - Go to [Heroku Dashboard](https://dashboard.heroku.com/)
    - Click **"New" > "Create new app"**
    - Enter a name (e.g., `Shutter`)
@@ -258,10 +266,7 @@ refresh the page to like and comment on posts
 
    - Go to the **Settings** tab in Heroku
    - Under **Buildpacks**, click **Add Buildpack**
-   - Select:  
-     ```
-     https://github.com/heroku/heroku-buildpack-static
-     ```
+   - Select:  node.js
    - Make sure it's listed above any other buildpacks
  
 

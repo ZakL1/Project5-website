@@ -10,7 +10,8 @@ import PostCreateForm from "./pages/posts/PostCreateForm";
 import PostsPage from "./pages/posts/PostsPage";
 import PostEditForm from "./pages/posts/PostEditForm";
 import ProfileEditForm from "./pages/profiles/ProfileEditForm";
-import RequireAuth from "./components/RequireAuth"; // 🔒 Import added
+import RequireAuth from "./components/RequireAuth";
+import ChallengeList from './pages/challenge/ChallengeList';
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
                             </RequireAuth>
                         } />
                         <Route path="/posts/:id/edit" element={<PostEditForm />} />
+                        <Route path="/challenges" element={<ChallengeList />} />
                         <Route path="*" element={<p>Page not found!</p>} />
                     </Routes>
                 </Container>

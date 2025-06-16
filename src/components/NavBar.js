@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import styles from "../styles/NavBar.module.css";
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { FaHome, FaUser, FaShare, FaSignInAlt, FaSignOutAlt, FaUserPlus } from "react-icons/fa";
+import { FaHome, FaUser, FaShare, FaSignInAlt, FaSignOutAlt, FaUserPlus, FaCamera } from "react-icons/fa";
 import shutterLogo from '../assets/shutter.png';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,6 +40,8 @@ function NavBar() {
               <FaUser style={{ marginRight: '8px' }} />Profile</Nav.Link>
               <Nav.Link as={NavLink} to="/posts/create" className={styles.NavLink}>
               <FaShare style={{ marginRight: '8px' }} />Share</Nav.Link>
+              <Nav.Link as={NavLink} to="/challenges" className={styles.NavLink}>
+              <FaCamera style={{ marginRight: '8px' }} />Challenges</Nav.Link>
               </>
             )}
           </Nav>

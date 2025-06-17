@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axiosDefaults";
 
@@ -26,6 +26,8 @@ const PostCreateForm = () => {
   const [errors, setErrors] = useState({});
   const imageInput = useRef(null);
   const navigate = useNavigate();
+  const [challenges, setChallenges] = useState([]);
+  const [selectedChallenge, setSelectedChallenge] = useState("");
 
   const { title, content } = postData;
 
@@ -68,6 +70,9 @@ const handleSubmit = async (event) => {
   formData.append("title", title);
   formData.append("content", content);
   formData.append("image", imageFile);
+  if (selectedChallenge) {
+    formData.append("challenge", selectedChallenge);
+  }
 
   try {
     await api.post("api/posts/", formData);
@@ -77,6 +82,23 @@ const handleSubmit = async (event) => {
       setErrors(err.response?.data);
     }
   }
+};
+
+// Select the challenge option
+useEffect(() => {
+  const fetchChallenges = async () => {
+    try {
+      const { data } = await api.get("api/challenges/");
+      setChallenges(data.results || data); // supports pagination or plain array
+    } catch (err) {
+      console.error("Error fetching challenges", err);
+    }
+  };
+  fetchChallenges();
+}, []);
+
+const handleChallengeChange = (event) => {
+  setSelectedChallenge(event.target.value);
 };
 
   return (
@@ -157,6 +179,22 @@ const handleSubmit = async (event) => {
                 {message}
               </Alert>
             ))}
+
+            <Form.Group>
+              <Form.Label>Challenge (optional)</Form.Label>
+              <Form.Control
+                as="select"
+                value={selectedChallenge}
+                onChange={handleChallengeChange}
+              >
+                <option value="">-- Select a challenge --</option>
+                {challenges.map((challenge) => (
+                  <option key={challenge.id} value={challenge.id}>
+                    {challenge.title}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
 
             <div className="mt-3 text-center">
               <Button variant="secondary" onClick={() => navigate(-1)} className="me-2">

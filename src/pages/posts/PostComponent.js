@@ -155,148 +155,173 @@ const Post = (props) => {
 
   return (
     <Container className="d-flex justify-content-center">
-      <Card className={styles.Post} style={{ backgroundColor: "#d7e3fc" }}>
-        <Card.Body>
-          <Figure className="d-flex justify-content-start align-items-start mb-3">
-            <Avatar
-              src={
-                profile_image?.startsWith("http")
-                  ? profile_image
-                  : "https://res.cloudinary.com/dvajuxx87/image/upload/v1746104198/defaultprofile_hwuglk.jpg"
-              }
-              height={55}
-              className="me-2"
-            />
-            <div>
-                {owner}             
-              <div>
-                <small>{formatDate(updated_at)}</small>
-              </div>
-            </div>
-          </Figure>
+  <Card
+    className={`${styles.Post} d-flex flex-column`}
+    style={{
+      backgroundColor: "#d7e3fc",
+      height: "85vh",
+      width: "100%",
+      maxWidth: "500px"
+    }}
+  >
+    {/* Header: User + Title */}
+    <Card.Body className="pb-0">
+      <Figure className="d-flex justify-content-start align-items-start mb-3">
+        <Avatar
+          src={
+            profile_image?.startsWith("http")
+              ? profile_image
+              : "https://res.cloudinary.com/dvajuxx87/image/upload/v1746104198/defaultprofile_hwuglk.jpg"
+          }
+          height={55}
+          className="me-2"
+        />
+        <div>
+          <div>{owner}</div>
+          <small>{formatDate(updated_at)}</small>
+        </div>
+      </Figure>
 
-          {title && (
-            <Card.Title className="mb-3 text-center" style={{ fontSize: "4vh" }}>
-              {title}
-            </Card.Title>
-          )}
-        </Card.Body>
+      {title && (
+        <Card.Title
+          className="mb-2 text-center"
+          style={{ fontSize: "2rem", lineHeight: "1.2" }}
+        >
+          {title}
+        </Card.Title>
+      )}
+    </Card.Body>
 
-          <Card.Img
-            src={image}
-            alt={title}
-            style={{
-              objectFit: "cover",
-              width: "100%",
-              height: "60vh",
-              padding: "2vh",
-            }}
-          />
+    {/* Portrait Image */}
+    <div
+      style={{
+        height: "50vh",
+        width: "100%",
+        padding: "0 1rem",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}
+    >
+      <img
+        src={image}
+        alt={title}
+        style={{
+          height: "52vh",
+          width: "48vh",
+          maxWidth: "100%",
+          objectFit: "cover",
+          borderRadius: "8px"
+        }}
+      />
+    </div>
 
-        <Card.Body>
-          {content && <Card.Text>{content}</Card.Text>}
+    {/* Content + Actions */}
+    <Card.Body className="d-flex flex-column justify-content-between" style={{ flex: "1 1 auto" }}>
+      {content && <Card.Text className="mb-2">{content}</Card.Text>}
 
-          <div className={`d-flex justify-content-end align-items-center gap-3 ${styles.PostBar}`}>
-            {is_owner ? (
-              <OverlayTrigger
-                placement="top"
-                overlay={<Tooltip>You can't like your own post!</Tooltip>}
-              >
-                <span className={styles.DisabledHeart}>
-                  <FaRegHeart />
-                </span>
-              </OverlayTrigger>
-            ) : currentUser ? (
-              like_id ? (
-                <span onClick={handleUnlike}>
-                  <FaHeart className={styles.Heart} />
-                </span>
-              ) : (
-                <span onClick={handleLike}>
-                  <FaRegHeart className={styles.DisabledHeart} />
-                </span>
-              )
-            ) : (
-              <span onClick={() => setShowLoginMessage(true)}>
-                <FaRegHeart />
-              </span>
-            )}
-            <span>{likes_count}</span>
-            <span
-              onClick={() => {
-                if (!currentUser) {
-                  setShowLoginMessage(true);
-                  return;
-                }
-                toggleCommentPanel();
-              }}
-            >
-              <FaComment className={styles.CommentButton} />
+      <div className={`d-flex justify-content-end align-items-center gap-3 ${styles.PostBar}`}>
+        {is_owner ? (
+          <OverlayTrigger
+            placement="top"
+            overlay={<Tooltip>You can't like your own post!</Tooltip>}
+          >
+            <span className={styles.DisabledHeart}>
+              <FaRegHeart />
             </span>
-            {localCommentsCount}
-          </div>
+          </OverlayTrigger>
+        ) : currentUser ? (
+          like_id ? (
+            <span onClick={handleUnlike}>
+              <FaHeart className={styles.Heart} />
+            </span>
+          ) : (
+            <span onClick={handleLike}>
+              <FaRegHeart className={styles.DisabledHeart} />
+            </span>
+          )
+        ) : (
+          <span onClick={() => setShowLoginMessage(true)}>
+            <FaRegHeart />
+          </span>
+        )}
+        <span>{likes_count}</span>
+        <span
+          onClick={() => {
+            if (!currentUser) {
+              setShowLoginMessage(true);
+              return;
+            }
+            toggleCommentPanel();
+          }}
+        >
+          <FaComment className={styles.CommentButton} />
+        </span>
+        {localCommentsCount}
+      </div>
 
-          {/* Show login prompt if needed */}
-          {!currentUser && showLoginMessage && (
-            <Alert
-              variant="warning"
-              onClose={() => setShowLoginMessage(false)}
-              dismissible
-              className="mt-2"
-            >
-              Please <Link to="/signin">log in</Link> or <Link to="/signup">create an account</Link> to like or comment.
-            </Alert>
-          )}
+      {/* Login Prompt */}
+      {!currentUser && showLoginMessage && (
+        <Alert
+          variant="warning"
+          onClose={() => setShowLoginMessage(false)}
+          dismissible
+          className="mt-2"
+        >
+          Please <Link to="/signin">log in</Link> or{" "}
+          <Link to="/signup">create an account</Link> to like or comment.
+        </Alert>
+      )}
 
-          {/* Comment Panel */}
-          {showCommentPanel && (
-            <div className={styles.CommentPanel}>
-              <Form onSubmit={handleCommentSubmit}>
-                <Form.Group controlId="newComment">
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Write a comment…"
-                  />
-                </Form.Group>
-                <div className="d-flex justify-content-end">
-                  <button className="btn btn-primary btn-sm mt-2" type="submit">
-                    <FaPaperPlane />
-                  </button>
-                </div>
-              </Form>
-
-              <div className={styles.CommentList}>
-                {loadingComments ? (
-                  <Asset spinner />
-                ) : (
-                  comments.map((comment) => (
-                    <div key={comment.id} className={styles.Comment}>
-                      <div className="d-flex justify-content-between align-items-start">
-                        <div>
-                          <strong>{comment.owner}</strong>
-                          <p className="mb-1">{comment.body}</p>
-                        </div>
-                        {currentUser?.username === comment.owner && (
-                          <button
-                            onClick={() => handleDeleteComment(comment.id)}
-                            className="btn btn-sm btn-outline-danger"
-                          >
-                            <FaTrashAlt />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
+      {/* Comment Panel */}
+      {showCommentPanel && (
+        <div className={styles.CommentPanel}>
+          <Form onSubmit={handleCommentSubmit}>
+            <Form.Group controlId="newComment">
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Write a comment…"
+              />
+            </Form.Group>
+            <div className="d-flex justify-content-end">
+              <button className="btn btn-primary btn-sm mt-2" type="submit">
+                <FaPaperPlane />
+              </button>
             </div>
-          )}
-        </Card.Body>
-      </Card>
-    </Container>
+          </Form>
+
+          <div className={styles.CommentList}>
+            {loadingComments ? (
+              <Asset spinner />
+            ) : (
+              comments.map((comment) => (
+                <div key={comment.id} className={styles.Comment}>
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div>
+                      <strong>{comment.owner}</strong>
+                      <p className="mb-1">{comment.body}</p>
+                    </div>
+                    {currentUser?.username === comment.owner && (
+                      <button
+                        onClick={() => handleDeleteComment(comment.id)}
+                        className="btn btn-sm btn-outline-danger"
+                      >
+                        <FaTrashAlt />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+    </Card.Body>
+  </Card>
+</Container>
   );
 };
 

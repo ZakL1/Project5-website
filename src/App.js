@@ -36,7 +36,11 @@ function App() {
                             </RequireAuth>
                         } />
                         <Route path="/posts/:id/edit" element={<PostEditForm />} />
-                        <Route path="/challenges" element={<ChallengeList />} />
+                        <Route path="/challenges" element={
+                            <RequireAuth>
+                                <ChallengeList />
+                            </RequireAuth>
+                        } />
                         <Route path="*" element={<p>Page not found!</p>} />
                     </Routes>
                 </Container>

@@ -172,6 +172,145 @@ a light and simplistic feel so went with blue and used react icons.
 
 - Result: Pass
 
+
+- __Manual Test 5: Deleting a Post__
+
+- Goal: Confirm a user can delete their own post.
+
+- Steps I Took:
+
+- Logged into my test account.
+
+- Navigated to one of my existing posts.
+
+- Clicked the "Delete" button.
+
+- Confirmed the deletion when prompted.
+
+- What I Expected: The post would be permanently deleted and disappear from the homepage and my profile.
+
+- What Happened: The post was removed immediately without errors.
+
+- Result: Pass
+
+
+- __Manual Test 6: Editing a Post__
+
+- Goal: Ensure I can update the title, content, or image of a post.
+
+- Steps I Took:
+
+- Logged in and viewed one of my posts.
+
+- Clicked "Edit".
+
+- Changed the title and image.
+
+- Clicked save.
+
+- What I Expected: The post would update and reflect my changes.
+
+- What Happened: Changes appeared instantly on both the homepage and profile.
+
+- Result: Pass
+
+
+- __Manual Test 7: Challenge Filter Toggle__
+
+- Goal: Test the challenge filter toggle to hide "expired" challenges.
+
+- Steps I Took:
+
+- Went to the "Challenges" page.
+
+- Clicked the toggle button to hide expired challenges.
+
+- Watched the challenge list update accordingly.
+
+- What I Expected: Only active or expired challenges would be shown based on the toggle.
+
+- What Happened: Filter worked smoothly and clearly updated the UI.
+
+- Result: Pass
+
+
+- __Manual Test 8: Linking Post to Challenge__
+
+- Goal: Check that users can assign a challenge to their post.
+
+- Steps I Took:
+
+- Went to “Create Post”.
+
+- Filled in the form and selected a challenge from the dropdown.
+
+- Submitted the post.
+
+- What I Expected: The post would appear under the selected challenge’s “Top Posts” if it received enough likes.
+
+- What Happened: Post was correctly associated and counted for the challenge.
+
+- Result: Pass
+
+
+- __Manual Test 9: Expired Challenge Disclaimer__
+
+- Goal: Ensure users are informed when a challenge is expired.
+
+- Steps I Took:
+
+- Opened the challenge page for a past challenge.
+
+- Viewed the top posts section.
+
+- What I Expected: A message would appear to indicate that the challenge is no longer active and likes are only counted during valid dates.
+
+- What Happened: Disclaimer showed clearly and looked appropriate.
+
+- Result: Pass
+
+
+- __Manual Test 10: Redirect When Not Logged In (Create Post)__
+
+- Goal: Ensure users who aren't signed in can't access the "Create Post" page directly via URL.
+
+- Steps I Took:
+
+- Logged out of my account.
+
+- Manually typed /create in the browser’s address bar and hit enter.
+
+- What I Expected: I would be redirected to the sign-in page with a login prompt.
+
+- What Happened: I was incorrectly directed to the Create post form.
+
+- Result: Failed
+
+- What I changed: I added "RequireAuth" to the Create Post link to prevent this from happening
+in the future.
+
+- Result: Pass
+
+
+- __Manual Test 11: Prevent Liking Without Login__
+
+- Goal: Make sure users must be logged in to like a post.
+
+- Steps I Took:
+
+- Logged out.
+
+- Went to the homepage.
+
+- Clicked the heart icon on a post.
+
+- What I Expected: A message would tell me to log in.
+
+- What Happened: I got a warning alert saying I must log in to like the post.
+
+- Result: Pass
+
+
 ## Automatic testing
 
 - Did not have time to implement this

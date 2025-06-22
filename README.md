@@ -96,6 +96,15 @@ Shutter is designed to be intuitive, fully responsive, and user-friendly—wheth
 
 ![Sign Up](src/assets/signup.PNG)
 
+- __Challenge Page__
+
+  - Users can browse a list of photo challenges, each with a title, description, and start/end dates.
+  - Under each challenge, the top 3 posts with the most likes are displayed, adding a competitive and engaging element.
+  - The like-based ranking system motivates users to share their best work and engage with other photographers.
+  - Users can toggle between ongoing and past challenges, keeping the interface clean and relevant. 
+
+![Challenge Page](src/assets/challengepage.PNG)
+
 ## Components
 
 -  __Asset__
@@ -122,17 +131,17 @@ a light and simplistic feel so went with blue and used react icons.
 
 - Steps I Took:
 
-- Logged into my test account.
+   - Logged into my test account.
 
-- Clicked on “Create Post” in the navbar.
+   - Clicked on “Create Post” in the navbar.
 
-- Filled in the title, content, and uploaded an image.
+   - Filled in the title, content, and uploaded an image.
 
-- Clicked the “Create Post” button.
+   - Clicked the “Create Post” button.
 
-- What I Expected: The post would be created and take me back to the homepage where I’d see it listed.
+   - What I Expected: The post would be created and take me back to the homepage where I’d see it listed.
 
-- What Happened: Worked perfectly — the post appeared instantly on the homepage and on my profile.
+   - What Happened: Worked perfectly — the post appeared instantly on the homepage and on my profile.
 
 - Result: Pass
 
@@ -142,17 +151,17 @@ a light and simplistic feel so went with blue and used react icons.
 
 - Steps I Took:
 
-- Logged in.
+   - Logged in.
 
-- Found a post on the homepage.
+   - Found a post on the homepage.
 
-- Clicked the heart icon to like it.
+   - Clicked the heart icon to like it.
 
-- Clicked it again to unlike it.
+   - Clicked it again to unlike it.
 
-- What I Expected: The like count would go up and down accordingly.
+   - What I Expected: The like count would go up and down accordingly.
 
-- What Happened: Everything worked as expected, and I couldn’t like my own posts — which is good!
+   - What Happened: Everything worked as expected, and I couldn’t like my own posts — which is good!
 
 - Result: Pass
 
@@ -161,34 +170,34 @@ a light and simplistic feel so went with blue and used react icons.
 
 - Steps I Took:
 
-- Logged in.
+   - Logged in.
 
-- Clicked the comment icon under a post.
+   - Clicked the comment icon under a post.
 
-- Typed a comment and hit submit.
+   - Typed a comment and hit submit.
 
-- What I Expected: My comment would appear right away below the form.
+   - What I Expected: My comment would appear right away below the form.
 
-- What Happened: The comment popped up immediately and stayed there after refreshing the page.
+   - What Happened: The comment popped up immediately and stayed there after refreshing the page.
 
-- Result: Pass
+   - Result: Pass
 
 -   __Manual Test 4: Edit Profile__
 - Goal: Check if I can update my profile bio and image.
 
 - Steps I Took:
 
-- Logged in and went to my profile page.
+   - Logged in and went to my profile page.
 
-- Clicked “Edit Profile”.
+   - Clicked “Edit Profile”.
 
-- Uploaded a new profile picture.
+   - Uploaded a new profile picture.
 
-- Clicked save and went back to my profile.
+   - Clicked save and went back to my profile.
 
-- What I Expected: The picture would update and be visible immediately.
+   - What I Expected: The picture would update and be visible immediately.
 
-- What Happened: The new info showed up straight away — no issues.
+   - What Happened: The new info showed up straight away — no issues.
 
 - Result: Pass
 
@@ -199,17 +208,17 @@ a light and simplistic feel so went with blue and used react icons.
 
 - Steps I Took:
 
-- Logged into my test account.
+   - Logged into my test account.
 
-- Navigated to one of my existing posts.
+   - Navigated to one of my existing posts.
 
-- Clicked the "Delete" button.
+   - Clicked the "Delete" button.
 
-- Confirmed the deletion when prompted.
+   - Confirmed the deletion when prompted.
 
-- What I Expected: The post would be permanently deleted and disappear from the homepage and my profile.
+   - What I Expected: The post would be permanently deleted and disappear from the homepage and my profile.
 
-- What Happened: The post was removed immediately without errors.
+   - What Happened: The post was removed immediately without errors.
 
 - Result: Pass
 
@@ -220,17 +229,17 @@ a light and simplistic feel so went with blue and used react icons.
 
 - Steps I Took:
 
-- Logged in and viewed one of my posts.
+   - Logged in and viewed one of my posts.
 
-- Clicked "Edit".
+   - Clicked "Edit".
 
-- Changed the title and image.
+   - Changed the title and image.
 
-- Clicked save.
+   - Clicked save.
 
-- What I Expected: The post would update and reflect my changes.
+   - What I Expected: The post would update and reflect my changes.
 
-- What Happened: Changes appeared instantly on both the homepage and profile.
+   - What Happened: Changes appeared instantly on both the homepage and profile.
 
 - Result: Pass
 
@@ -241,15 +250,15 @@ a light and simplistic feel so went with blue and used react icons.
 
 - Steps I Took:
 
-- Went to the "Challenges" page.
+   - Went to the "Challenges" page.
 
-- Clicked the toggle button to hide expired challenges.
+   - Clicked the toggle button to hide expired challenges.
 
-- Watched the challenge list update accordingly.
+   - Watched the challenge list update accordingly.
 
-- What I Expected: Only active or expired challenges would be shown based on the toggle.
+   - What I Expected: Only active or expired challenges would be shown based on the toggle.
 
-- What Happened: Filter worked smoothly and clearly updated the UI.
+   - What Happened: Filter worked smoothly and clearly updated the UI.
 
 - Result: Pass
 
@@ -260,15 +269,15 @@ a light and simplistic feel so went with blue and used react icons.
 
 - Steps I Took:
 
-- Went to “Create Post”.
+   - Went to “Create Post”.
 
-- Filled in the form and selected a challenge from the dropdown.
+   - Filled in the form and selected a challenge from the dropdown.
 
-- Submitted the post.
+   - Submitted the post.
 
-- What I Expected: The post would appear under the selected challenge’s “Top Posts” if it received enough likes.
+   - What I Expected: The post would appear under the selected challenge’s “Top Posts” if it received enough likes.
 
-- What Happened: Post was correctly associated and counted for the challenge.
+   - What Happened: Post was correctly associated and counted for the challenge.
 
 - Result: Pass
 
@@ -279,13 +288,13 @@ a light and simplistic feel so went with blue and used react icons.
 
 - Steps I Took:
 
-- Opened the challenge page for a past challenge.
+   - Opened the challenge page for a past challenge.
 
-- Viewed the top posts section.
+   - Viewed the top posts section.
 
-- What I Expected: A message would appear to indicate that the challenge is no longer active and likes are only counted during valid dates.
+   - What I Expected: A message would appear to indicate that the challenge is no longer active and likes are only counted during valid dates.
 
-- What Happened: Disclaimer showed clearly and looked appropriate.
+   - What Happened: Disclaimer showed clearly and looked appropriate.
 
 - Result: Pass
 
@@ -296,18 +305,18 @@ a light and simplistic feel so went with blue and used react icons.
 
 - Steps I Took:
 
-- Logged out of my account.
+   - Logged out of my account.
 
-- Manually typed /create in the browser’s address bar and hit enter.
+   - Manually typed /create in the browser’s address bar and hit enter.
 
-- What I Expected: I would be redirected to the sign-in page with a login prompt.
+   - What I Expected: I would be redirected to the sign-in page with a login prompt.
 
-- What Happened: I was incorrectly directed to the Create post form.
+   - What Happened: I was incorrectly directed to the Create post form.
 
 - Result: Failed
 
-- What I changed: I added "RequireAuth" to the Create Post link to prevent this from happening
-in the future.
+   - What I changed: I added "RequireAuth" to the Create Post link to prevent this from happening
+   in the future.
 
 - Result: Pass
 
@@ -318,15 +327,15 @@ in the future.
 
 - Steps I Took:
 
-- Logged out.
+   - Logged out.
 
-- Went to the homepage.
+   - Went to the homepage.
 
-- Clicked the heart icon on a post.
+   - Clicked the heart icon on a post.
 
-- What I Expected: A message would tell me to log in.
+   - What I Expected: A message would tell me to log in.
 
-- What Happened: I got a warning alert saying I must log in to like the post.
+   - What Happened: I got a warning alert saying I must log in to like the post.
 
 - Result: Pass
 

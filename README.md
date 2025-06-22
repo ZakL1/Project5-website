@@ -5,6 +5,26 @@ Shutter is a photography-focused social media web application that allows users 
 Shutter is designed to be intuitive, fully responsive, and user-friendly—whether you're a casual viewer or an active contributor. The aim is to provide a clean, simple space for users to explore, express, and connect through shared visual experiences.
 
 ![Responsive Mockup](src/assets/responsive.PNG)
+
+### Planning and design
+
+- __Colour scheme and design__
+- I chose to use a combination of lighter colours, blue specifically because it was fitting for a social media site. I didn't use bold or dramatic colours as I wanted to main focus point to be the images that were uploaded, as the website is for sharing photography. In addition to the colours I chose Montserrat as the primary font for the application due to its modern, minimalist appearance and high readability. The font complements the clean and user-friendly layout of the app and contributes to a consistent, polished visual aesthetic. It also aligns with popular design trends used in platforms like Instagram, giving the interface a familiar and professional feel. 
+- The application is fully responsive and optimized for mobile devices, ensuring a smooth user experience across all screen sizes. Given that the majority of social media users access platforms via smartphones, mobile-first design was a key consideration throughout development.
+
+
+- __Profile Page__
+- I kept the profile page simple for the user, the user has an easy way to see what they have posted and their profile image. The profile page makes it easy for them to edit and delete their posts.
+![Profile Page](src/assets/wireframe1.JPG)
+
+- __Challenge Page__
+- For the challenge page (my custom model) I wanted the user to feel like their likes actaully promoted the photgraphers more. This way if a user submitted a post to one of the active challenges other user likes were promoting their work. This made the site more photography orientated and sets it apart from other social medias.
+![Challenge Page](src/assets/wireframe2.JPG)
+
+- __Post Page__
+- For the post page I wanted the images to come one after the other and not next to each other so the user can focus on each image individually and properly enage with the post.
+![Post Page](src/assets/wireframe3.JPG)
+
  
 ### Existing Features
 

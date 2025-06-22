@@ -180,7 +180,7 @@ a light and simplistic feel so went with blue and used react icons.
 
    - What Happened: The comment popped up immediately and stayed there after refreshing the page.
 
-   - Result: Pass
+- Result: Pass
 
 -   __Manual Test 4: Edit Profile__
 - Goal: Check if I can update my profile bio and image.
@@ -368,6 +368,7 @@ refresh the page to like and comment on posts
 - The ability to go to other users accounts 
 - Upload videos with audio
 - Remember me button for quick and easy sign in
+- Allow users to request certain challenges
 
 ## Technologies & Libraries 
 
@@ -413,7 +414,7 @@ refresh the page to like and comment on posts
   - web: gunicorn your_project_name.wsgi
 
 
-### 🌐 Deploying to Heroku
+### Deploying to Heroku
 
 1. **Create a New App on Heroku**
 
@@ -438,7 +439,7 @@ refresh the page to like and comment on posts
    - Make sure it's listed above any other buildpacks
  
 
-### 🚀 Deploy the App
+### Deploy the App
 
 1. Go to the **Deploy** tab
 2. Under **Manual deploy**, select your branch (e.g., `main`)
